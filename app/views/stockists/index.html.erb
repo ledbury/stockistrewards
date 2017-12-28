@@ -1,0 +1,71 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({
+        title: "Stockists",
+        icon: "<%#= asset_path('favicon.ico') %>",
+        buttons: {
+          primary: {
+            label: 'New Stockist',
+            message: 'save',
+            href: 'https://stockistrewards.com/stockists/new'
+          },
+          secondary: [{
+            label: 'Help',
+            message: 'help',
+            href: 'mailto:info@mauinewyork.com'
+          },{
+            label: 'Settings',
+            message: 'settings',
+            href: 'https://stockistrewards.com/settings'
+          }]
+        }
+      });
+    });
+    ShopifyApp.Bar.initialize
+  </script>
+<% end %>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="Polaris-Card">
+      <ul class="Polaris-ResourceList">
+        <% @stockists.each do |s| %>
+          <li class="Polaris-ResourceList__ItemWrapper">
+            <div class="Polaris-ResourceList__Item Polaris-ResourceList__Item--link"><a aria-describedby="ResourceListItem2" class="Polaris-ResourceList__Link" href="/stockists/<%=s.id%>/edit" data-polaris-unstyled="true"></a>
+              <div class="Polaris-ResourceList__Container" id="ResourceListItem2">
+                <div class="Polaris-ResourceList__Content">
+                  <div class="Polaris-ResourceList__Attributes">
+                    <div class="row">
+                      <p class="Polaris-ResourceList__AttributeOne"><%= s.name %></p>
+                      <div class="Polaris-ResourceList__AttributeTwo"><%= s.country %><%= s.postcode %></div>
+                      <div class="Polaris-ResourceList__Badge"><span class="Polaris-Badge"><%= s.reward_percentage %>% REWARD</span></div>
+                      <div class="Polaris-ResourceList__AttributeThree"><span class="Polaris-TextStyle--variationSubdued">Since <%=time_ago_in_words(s.created_at) %> ago</span></div>
+
+                      <div class="col-sm-3">
+                        <div class="Polaris-ButtonGroup product-links">
+                          <div class="Polaris-ButtonGroup__Item">
+                            <%= link_to video, class: 'Polaris-Button', data: { polaris: { unstyled: true } } do %>
+                              <span class="Polaris-Button__Content product-view-link">View</span>
+                            <% end %>
+                          </div>
+                          <div class="Polaris-ButtonGroup__Item">
+                            <%= link_to video,  method: :delete, data: { confirm: 'Are you sure?' }, class: 'Polaris-Button' do %>
+                              <span class="Polaris-Icon">
+                                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M16 6H4a1 1 0 1 0 0 2h1v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8h1a1 1 0 1 0 0-2zM9 4a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2H9zm2 12h2V8h-2v8zm-4 0h2V8H7v8z" fill="#31373D" fill-rule="evenodd"/></svg>
+                              </span>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

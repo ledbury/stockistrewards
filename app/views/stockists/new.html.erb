@@ -1,0 +1,38 @@
+<%= form_for @stockist do |f| %>
+  <%= f.hidden_field :shop_id, value: @shop.id %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="Polaris-FormLayout">
+          <%= render 'new_text_input', {form: f, field: :name, label: 'Stockist Name'} %>
+          <%= render 'new_text_input', {form: f, field: :address_1, label: 'Address'} %>
+          <%= render 'new_text_input', {form: f, field: :address_2, label: 'Address 2'} %>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= render 'new_text_input', {form: f, field: :city, label: 'City'} %>
+            </div>
+            <div class="col-sm-6">
+              <%= render 'new_text_input', {form: f, field: :postcode, label: 'Zip/Post Code'} %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= render 'new_text_input', {form: f, field: :order_radius, label: 'Order Radius'} %>
+            </div>
+            <div class="col-sm-6">
+              <%= render 'new_text_input', {form: f, field: :reward_percentage, label: 'Reward Percentage'} %>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="Polaris-Button Polaris-Button--primary new-submit"><span class="Polaris-Button__Content"><span>Create Stockist</span></span></button>
+      </div>
+
+      <div class="col-sm-6">
+        <div id="map"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+<% end %>

@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  address_1: MyString
+  address_2: MyString
+  city: MyString
+  state: MyString
+  country: MyString
+  postcode: MyString
+  order_radius: 9.99
+  reward_percentage: 1
+
+two:
+  name: MyString
+  address_1: MyString
+  address_2: MyString
+  city: MyString
+  state: MyString
+  country: MyString
+  postcode: MyString
+  order_radius: 9.99
+  reward_percentage: 1
