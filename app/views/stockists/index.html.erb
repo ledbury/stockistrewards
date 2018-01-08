@@ -25,9 +25,9 @@
     ShopifyApp.Bar.initialize
   </script>
 <% end %>
-
+<div class="container-fluid">
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-sm-12">
     <div class="Polaris-Card">
       <ul class="Polaris-ResourceList">
         <% @stockists.each do |s| %>
@@ -36,21 +36,23 @@
               <div class="Polaris-ResourceList__Container" id="ResourceListItem2">
                 <div class="Polaris-ResourceList__Content">
                   <div class="Polaris-ResourceList__Attributes">
-                    <div class="row">
-                      <p class="Polaris-ResourceList__AttributeOne"><%= s.name %></p>
-                      <div class="Polaris-ResourceList__AttributeTwo"><%= s.country %><%= s.postcode %></div>
-                      <div class="Polaris-ResourceList__Badge"><span class="Polaris-Badge"><%= s.reward_percentage %>% REWARD</span></div>
-                      <div class="Polaris-ResourceList__AttributeThree"><span class="Polaris-TextStyle--variationSubdued">Since <%=time_ago_in_words(s.created_at) %> ago</span></div>
+                      <div class="col-sm-6">
 
-                      <div class="col-sm-3">
+                        <p class="Polaris-ResourceList__AttributeOne"><%= s.name %></p>
+                        <div class="Polaris-ResourceList__AttributeTwo"><%= s.country %><%= s.postcode %></div>
+                        <div class="Polaris-ResourceList__Badge"><span class="Polaris-Badge"><%= s.reward_percentage %>% REWARD</span></div>
+                        <div class="Polaris-ResourceList__AttributeThree"><span class="Polaris-TextStyle--variationSubdued">Since <%=time_ago_in_words(s.created_at) %> ago</span></div>
+                      </div>
+
+                      <div class="col-sm-6">
                         <div class="Polaris-ButtonGroup product-links">
                           <div class="Polaris-ButtonGroup__Item">
-                            <%= link_to video, class: 'Polaris-Button', data: { polaris: { unstyled: true } } do %>
+                            <%= link_to s, class: 'Polaris-Button', data: { polaris: { unstyled: true } } do %>
                               <span class="Polaris-Button__Content product-view-link">View</span>
                             <% end %>
                           </div>
                           <div class="Polaris-ButtonGroup__Item">
-                            <%= link_to video,  method: :delete, data: { confirm: 'Are you sure?' }, class: 'Polaris-Button' do %>
+                            <%= link_to s,  method: :delete, data: { confirm: 'Are you sure?' }, class: 'Polaris-Button' do %>
                               <span class="Polaris-Icon">
                                 <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M16 6H4a1 1 0 1 0 0 2h1v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8h1a1 1 0 1 0 0-2zM9 4a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2H9zm2 12h2V8h-2v8zm-4 0h2V8H7v8z" fill="#31373D" fill-rule="evenodd"/></svg>
                               </span>
@@ -59,7 +61,6 @@
                         </div>
                       </div>
                     </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -68,4 +69,5 @@
       </ul>
     </div>
   </div>
+</div>
 </div>

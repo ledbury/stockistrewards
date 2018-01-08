@@ -7,16 +7,21 @@ class StockistsController < ApplicationController
 
   def new
     @stockist = Stockist.new
-    
+
   end
 
   def create
     @stockist = Stockist.new(stockist_params)
     if @stockist.save
-      redirect_to 'index' and return
+      redirect_to :index and return
     else
       logger.info @stockist.errors.inspect
     end
+  end
+
+  def edit
+    @stockist = Stockist.new(stockist_params)
+
   end
 
   private
