@@ -2,7 +2,7 @@ class StockistsController < ApplicationController
   before_action :get_shop
 
   def index
-    @stockists = Stockist.all
+    @stockists = Stockist.where(shop: @shop)
   end
 
   def new
@@ -20,8 +20,7 @@ class StockistsController < ApplicationController
   end
 
   def edit
-    @stockist = Stockist.new(stockist_params)
-
+    @stockist = Stockist.find(params{})
   end
 
   private
