@@ -1,5 +1,6 @@
 class ApplicationController < ShopifyApp::AuthenticatedController
   protect_from_forgery with: :exception
+  include ShopifyApp::LoginProtection
 
   private
 
