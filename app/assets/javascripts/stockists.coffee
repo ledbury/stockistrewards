@@ -16,8 +16,9 @@ class App.Stockists extends App.Base
     $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode').on 'input', @updateMap
 
   @initMap: =>
-    App.Stockists.map = new google.maps.Map document.getElementById('map'),
-      {center: {lat: 39.50, lng: -98.35}, zoom: App.Stockists.zoomLevel}
+    e = document.getElementById('map')
+    if(e != null)
+      App.Stockists.map = new google.maps.Map e, {center: {lat: 39.50, lng: -98.35}, zoom: App.Stockists.zoomLevel}
 
   updateMap: ->
     a = App.Stockists.getAddress()

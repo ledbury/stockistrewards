@@ -21,47 +21,33 @@ class StockistsController < ApplicationController
   end
 
   def edit
-    @stockist = Stockist.find(params{})
+    @stockist = Stockist.find(params[:id])
+  end
+
+  def sync_orders
+    sync_response = sync_logic(page: params[:api_page].to_i)
+    respond_to do |format|
+      format.json { render json: sync_response }
+    end
   end
 
   private
 
-  def stockist_params
-    params.require(:stockist).permit(:shop_id, :name, :address_1, :address_2, :city, :postcode, :order_radius, :reward_percentage)
-  end
-
-  def sync_products
-    sync_response = sync_logic(page: params[:api_page].to_i)
-  end
-
   def sync_logic(**api_params)
     count = 0
-    products = ShopifyAPI::Product.find(:all, params: api_params)
-    products.each do |product|
-      product_record = Product.find_or_initialize_by({shop_id: @shop.id, shopify_id: product.id})
-      updates = false
+    orders = ShopifyAPI::Order.find(:all, params: api_params)
+    orders.each do |product|
+      order_record = Order.find_or_initialize_by({shop_id: @shop.id, shopify_id: order.id})
 
-      if product_record.title != product.title
-        product_record.title = product.title
-        updates = true
-      end
-
-      if product_record.handle != product.handle
-        product_record.handle = product.handle
-      end
-
-      if updates && product_record.save!
+      if order_record.save!
         count = count + 1
       end
-
-      product_video = ProductVideo.where("video_file_name like ? AND shopify_domain = ?", "%#{product_record.handle}%", @shopify_domain).first
-
-      if product_video.present? && product_video.product_id != product_record.id
-        product_video.product_id = product_record.id
-        product_video.save!
-      end
     end
-    { count: count, products: Product.where(shop_id: @shop.id), passed_params: api_params }
+    { count: count, products: Order.where(shop_id: @shop.id), passed_params: api_params }
+  end
+
+  def stockist_params
+    params.require(:stockist).permit(:shop_id, :name, :address_1, :address_2, :city, :postcode, :order_radius, :reward_percentage)
   end
 
 end
