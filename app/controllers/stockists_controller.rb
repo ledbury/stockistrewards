@@ -1,4 +1,4 @@
-class StockistsController < ApplicationController
+class StockistsController < ShopifyApp::AuthenticatedController
   before_action :get_shop
 
   def index
@@ -50,4 +50,9 @@ class StockistsController < ApplicationController
     params.require(:stockist).permit(:shop_id, :name, :address_1, :address_2, :city, :postcode, :order_radius, :reward_percentage)
   end
 
+  def get_shop
+    s = ShopifyAPI::Shop.current
+    @shop = Shop.find_by(shopify_domain: s.myshopify_domain)
+    @shopify_domain = s.domain.split('.')[0]
+  end
 end

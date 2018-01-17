@@ -7,6 +7,7 @@ end
 
 gem 'rails', '~> 5.1.2'
 gem 'mysql2'
+gem 'paperclip'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'coffee-rails'

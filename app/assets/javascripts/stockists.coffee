@@ -8,9 +8,10 @@ class App.Stockists extends App.Base
   syncOrders: (url, page = 1) ->
     startSync = $.get "#{url}?api_page=#{page}", (data) ->
       syncedProgressCount = parseInt($('.synced-order-count').text())
-      for orders in data.orders
-        syncedProgressCount += 1
-      $('.synced-order-count').text(syncedProgressCount)
+      unless orders == undefined
+        for orders in data.orders
+          syncedProgressCount += 1
+        $('.synced-order-count').text(syncedProgressCount)
 
   new: =>
     $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode').on 'input', @updateMap

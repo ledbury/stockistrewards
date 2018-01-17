@@ -52,6 +52,7 @@
 
                   <select id="stockist_state" name="stockist[state]" class="Polaris-Select__Input">
                     <% @states.each do |s| %>
+                      <% next if s[1].name.include? 'Armed Forces' %>
                       <option value="<%=s[0]%>"><%=s[1].name%></option>
                     <% end %>
                   </select>
