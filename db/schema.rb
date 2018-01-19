@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180117220832) do
+ActiveRecord::Schema.define(version: 20180119180750) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "namespace"
@@ -45,20 +45,25 @@ ActiveRecord::Schema.define(version: 20180117220832) do
 
   create_table "line_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "order_id"
-    t.integer "shopify_id"
+    t.bigint "shopify_id"
     t.integer "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "shopify_id"
+    t.bigint "shopify_id"
     t.integer "shop_id"
     t.string "customer_name"
     t.string "total"
     t.string "shipping_postcode"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "customer_email"
+    t.string "name"
+    t.float "latitude", limit: 24
+    t.float "longitude", limit: 24
+    t.string "full_street_address"
   end
 
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -91,6 +96,10 @@ ActiveRecord::Schema.define(version: 20180117220832) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "shop_id"
+    t.float "latitude", limit: 24
+    t.float "longitude", limit: 24
+    t.string "full_street_address"
+    t.integer "last_eligible_order_count"
   end
 
 end

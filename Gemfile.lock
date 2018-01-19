@@ -103,6 +103,7 @@ GEM
     ffi (1.9.18)
     foreman (0.84.0)
       thor (~> 0.19.1)
+    geocoder (1.4.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hashie (3.5.7)
@@ -249,6 +250,7 @@ DEPENDENCIES
   coffee-rails
   countries
   foreman
+  geocoder
   jquery-rails
   listen
   mysql2

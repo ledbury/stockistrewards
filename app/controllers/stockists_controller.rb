@@ -3,6 +3,9 @@ class StockistsController < ShopifyApp::AuthenticatedController
 
   def index
     @stockists = Stockist.where(shop: @shop)
+    if @stockists.count == 0
+      redirect_to action: 'new'
+    end
   end
 
   def new
@@ -24,8 +27,21 @@ class StockistsController < ShopifyApp::AuthenticatedController
     @stockist = Stockist.find(params[:id])
   end
 
+  def destroy
+    @stockist = Stockist.find(params[:id])
+    @stockist.destroy
+    redirect_to action: "index"
+  end
+
+  def get_total_orders
+    count = get_order_count
+    respond_to do |format|
+      format.json { render json: { count: count } }
+    end
+  end
+
   def sync_orders
-    sync_response = sync_logic(page: params[:api_page].to_i)
+    sync_response = Order.sync_logic(params[:api_page].to_i, @shop)
     respond_to do |format|
       format.json { render json: sync_response }
     end
@@ -33,21 +49,8 @@ class StockistsController < ShopifyApp::AuthenticatedController
 
   private
 
-  def sync_logic(**api_params)
-    count = 0
-    orders = ShopifyAPI::Order.find(:all, params: api_params)
-    orders.each do |product|
-      order_record = Order.find_or_initialize_by({shop_id: @shop.id, shopify_id: order.id})
-
-      if order_record.save!
-        count = count + 1
-      end
-    end
-    { count: count, products: Order.where(shop_id: @shop.id), passed_params: api_params }
-  end
-
   def stockist_params
-    params.require(:stockist).permit(:shop_id, :name, :address_1, :address_2, :city, :postcode, :order_radius, :reward_percentage)
+    params.require(:stockist).permit(:shop_id, :name, :address_1, :address_2, :city, :state, :postcode, :order_radius, :reward_percentage)
   end
 
   def get_shop
@@ -55,4 +58,9 @@ class StockistsController < ShopifyApp::AuthenticatedController
     @shop = Shop.find_by(shopify_domain: s.myshopify_domain)
     @shopify_domain = s.domain.split('.')[0]
   end
+
+  def get_order_count
+    ShopifyAPI::Order.count
+  end
+
 end

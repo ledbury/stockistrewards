@@ -22,3 +22,15 @@
   float: right;
   button {position: relative; float: left; margin-left: 40px;}
 }
+.product-links {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 25px;
+}
+.product-video-row {
+  display: flex;
+  align-items: center;
+  &.product-show-video-row {
+    align-items: flex-start;
+  }
+}
