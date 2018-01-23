@@ -3,6 +3,9 @@ class StockistsController < ShopifyApp::AuthenticatedController
 
   def index
     @stockists = Stockist.where(shop: @shop)
+
+
+    OrderSyncJob.perform_later(@shop)
     if @stockists.count == 0
       redirect_to action: 'new'
     end
@@ -37,13 +40,6 @@ class StockistsController < ShopifyApp::AuthenticatedController
     count = get_order_count
     respond_to do |format|
       format.json { render json: { count: count } }
-    end
-  end
-
-  def sync_orders
-    sync_response = Order.sync_logic(params[:api_page].to_i, @shop)
-    respond_to do |format|
-      format.json { render json: sync_response }
     end
   end
 

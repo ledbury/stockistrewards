@@ -2,40 +2,19 @@ class Order < ApplicationRecord
   belongs_to :shop
   has_many :line_items
 
-  geocoded_by :full_street_address
-  after_validation :geocode
-
-  def self.sync_logic(page, shop)
-    order_count = 0
-    orders = ShopifyAPI::Order.find(:all, params: {page: page})
-    orders.each do |order|
-
-      logger.info order.inspect
-      order_record = Order.find_or_initialize_by({shop_id: shop.id, shopify_id: order.id})
-      order_record.sync_order order
-
-      # line item
-
-
-      order_record.total = order.subtotal_price
-      if order_record.save!
-        order_count = order_count + 1
-      end
-    end
-    { count: order_count, orders: Order.where(shop_id: shop.id), passed_params: {page: page} }
-  end
-
-
   def sync_order(order)
 
     self.name = order.name
+    self.total = order.total_line_items_price
     self.shipping_postcode = order.customer.default_address.zip
     self.customer_email = order.customer.email
     self.customer_name = order.customer.first_name+' '+order.customer.last_name
-
+    self.created_at = order.processed_at.nil? ? order.created_at : order.processed_at
     self.full_street_address =
+      "#{order.shipping_address.address1} #{order.shipping_address.address2}, #{order.customer.default_address.city}, #{order.shipping_address.province_code} #{order.shipping_address.zip}"
+    self.latitude = order.shipping_address.latitude
+    self.longitude = order.shipping_address.longitude
 
-      "#{order.customer.default_address.address1}, #{order.customer.default_address.address2}, #{order.customer.default_address.city}, #{order.customer.default_address.province_code} #{order.customer.default_address.zip}"
   end
 
   private

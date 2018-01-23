@@ -27,13 +27,13 @@
 <% end %>
 <div class="container-fluid">
 <div class="row">
-
-    <span class="synced-order-count">0</span> of <span class="total-order-count"><%=@shop.orders.count%></span> Orders Synced
-
     <div class="Polaris-Card">
 
       <ul class="Polaris-ResourceList">
         <% @stockists.each do |s| %>
+          <% total_rewards = Reward.where(stockist_id:s.id).count %>
+          <% total_amount = Reward.where(stockist_id:s.id).sum(:amount) %>
+
           <li class="Polaris-ResourceList__ItemWrapper">
             <div class="Polaris-ResourceList__Item Polaris-ResourceList__Item--link">
               <div class="container-fluid">
@@ -49,7 +49,8 @@
 
                   </div>
                   <div class="col-sm-3">
-                    <span class="last-eligible-order-count"><%=s.last_eligible_order_count %></span> Orders Eligible For Reward</span>
+                    <span class="last-eligible-order-count"><%=total_rewards %></span> Orders Eligible For Reward</span>
+                    <span class="last-eligible-order-count"><%= number_to_currency total_amount %></span> To Be Paid</span>
                   </div>
                   <div class="col-sm-3">
                     <div class="Polaris-ButtonGroup product-links">

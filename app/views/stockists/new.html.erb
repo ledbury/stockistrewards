@@ -71,6 +71,9 @@
           <div class="col-sm-6">
             <%= render 'new_text_input', {form: f, field: :reward_percentage, label: 'Reward Percentage'} %>
           </div>
+          <div class="col-sm-12">
+            <%= f.text_field :started_at, data:{ provide:'datepicker' } %>
+          </div>
         </div>
         <div class="submit-btns">
           <button type="submit" class="Polaris-Button Polaris-Button--primary new-submit"><span class="Polaris-Button__Content"><span>Create Stockist</span></span></button>

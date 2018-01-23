@@ -3,7 +3,6 @@ class App.Stockists extends App.Base
   @zoomLevel: 4,
 
   index: =>
-    @setTotalOrderCount()
 
   new: =>
     $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode').on 'input', @updateMap
@@ -60,32 +59,3 @@ class App.Stockists extends App.Base
             $("#quote_"+type+"_address_attributes_city").val(data[0])
             $("#quote_"+type+"_address_attributes_region_id").val(data[1])
     ).trigger("change")
-
-  setTotalOrderCount: ->
-    _this = @
-    getTotalOrders = $.get '/total_orders', (data) ->
-      if data.count == 0
-        $('.total-order-count').html "No Orders to Sync Yet!"
-      else
-        $('.total-order-count').text data.count
-
-    getTotalOrders.done ->
-      _this.syncOrders(_this, "/sync_orders")
-
-  syncOrders: (_this, url, page = 1) ->
-    startSync = $.get "#{url}?api_page=#{page}", (data) ->
-      syncedProgressCount = parseInt($('.synced-order-count').text())
-      for orders in data.orders
-        syncedProgressCount += 1
-        $('.synced-order-count').text(syncedProgressCount)
-
-    startSync.done ->
-      _this.continueSync(_this, url, page)
-
-  continueSync: (_this, url, page) ->
-    console.log("continueSync page = "+page)
-    totalOrdersCount = parseInt($('.total-order-count').text())
-    syncedProgressCount = parseInt($('.synced-order-count').text())
-
-    if totalOrdersCount > syncedProgressCount
-      _this.syncOrders(_this, url, page + 1)

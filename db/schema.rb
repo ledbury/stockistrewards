@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180119180750) do
+ActiveRecord::Schema.define(version: 20180119215606) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "namespace"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20180119180750) do
     t.float "latitude", limit: 24
     t.float "longitude", limit: 24
     t.string "full_street_address"
+    t.float "reward_amount", limit: 24
   end
 
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -71,6 +72,14 @@ ActiveRecord::Schema.define(version: 20180119180750) do
     t.bigint "shopify_id"
     t.string "title"
     t.string "handle"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rewards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.float "amount", limit: 24
+    t.integer "stockist_id"
+    t.integer "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
