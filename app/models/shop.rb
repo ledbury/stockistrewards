@@ -6,14 +6,14 @@ class Shop < ActiveRecord::Base
   def sync_orders
     order_count = 0
     orders = 0
-    puts "INFO: sync_orders FOR STOCKIST: #{self.inspect}"
+    puts "INFO: sync_orders SHOP: #{self.inspect}"
 
     orders = get_orders_since_last_id
     while orders.count > 0
       orders.each do |order|
         logger.info order.inspect
         order_record = Order.find_or_initialize_by({shop_id: self.id, shopify_id: order.id})
-        next if defined?(order.customer).nil?
+        next if defined?(order.customer).nil? || defined?(order.shipping_address).nil?
         order_record.sync_order(order)
         if order_record.save
           order_count = order_count + 1
@@ -23,7 +23,6 @@ class Shop < ActiveRecord::Base
       end
       orders = get_orders_since_last_id
     end
-
   end
 
   def calculate_rewards
@@ -35,9 +34,18 @@ class Shop < ActiveRecord::Base
 
   private
 
+  def earliest_start_date
+    start_date = Date.today
+    self.stockists.each do |s|
+      st = s.started_at.blank? ? Date.today : s.started_at
+      start_date = [start_date, st].min
+    end
+    start_date
+  end
+
   def get_orders_since_last_id
     sid = Order.maximum(:shopify_id)
-    orders = ShopifyAPI::Order.find(:all, params: {since_id: sid, order: 'created_at ASC' })
+    orders = ShopifyAPI::Order.find(:all, params: {since_id: sid, order: 'created_at ASC', created_at_min: earliest_start_date })
   end
 
 end

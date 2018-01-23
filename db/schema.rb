@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180119215606) do
+ActiveRecord::Schema.define(version: 20180123221752) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "namespace"
@@ -49,6 +49,10 @@ ActiveRecord::Schema.define(version: 20180119215606) do
     t.integer "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "variant_shopify_id"
+    t.bigint "product_shopify_id"
+    t.string "product_type"
+    t.string "product_title"
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -65,6 +69,18 @@ ActiveRecord::Schema.define(version: 20180119215606) do
     t.float "longitude", limit: 24
     t.string "full_street_address"
     t.float "reward_amount", limit: 24
+  end
+
+  create_table "product_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "product_types_stockists", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "product_type_id", null: false
+    t.bigint "stockist_id", null: false
+    t.index ["product_type_id", "stockist_id"], name: "index_product_types_stockists_on_product_type_id_and_stockist_id"
   end
 
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -109,6 +125,7 @@ ActiveRecord::Schema.define(version: 20180119215606) do
     t.float "longitude", limit: 24
     t.string "full_street_address"
     t.integer "last_eligible_order_count"
+    t.datetime "started_at"
   end
 
 end

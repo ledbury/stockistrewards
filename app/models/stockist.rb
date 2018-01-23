@@ -1,7 +1,9 @@
 class Stockist < ApplicationRecord
   belongs_to :shop
   has_many :orders
-  before_save :set_country, :set_full_address, :geocode
+  has_many :rewards
+  has_and_belongs_to_many :product_types
+  before_save :set_country, :set_full_address, :geocode, :set_start_date
   geocoded_by :full_street_address
 
   def calculate_rewards
@@ -29,7 +31,31 @@ class Stockist < ApplicationRecord
   end
 
   def total_reward_amount
+    self.rewards.sum(:amount)
+  end
 
+  def self.import_csv
+    require 'csv'
+
+    # TEMPORARY
+    shop = Shop.first
+
+    CSV.foreach("stockists.csv", quote_char: '"', col_sep: ',', row_sep: :auto, headers: true) do |row|
+      if !row['Name'].blank?
+        st = Stockist.create({shop_id: shop.id, name: row['Name'], address_1: row['Address'], city: row['City'], state: row['State'], postcode: row['ZIP']})
+        st.order_radius = 10
+        st.reward_percentage = 10
+
+        # TEMPORARY
+        st.started_at = Date.today - 1.year
+
+        if st.save
+
+        else
+          logger.info "ERROR: STOCKIST failed to save: #{st.errors.inspect}"
+        end
+      end
+    end
   end
 
   private
@@ -39,6 +65,10 @@ class Stockist < ApplicationRecord
 
   def set_full_address
     self.full_street_address = "#{self.address_1} #{self.address_2}, #{self.city}, #{self.state} #{self.postcode}"
+  end
+
+  def set_start_date
+    self.started_at = Date.today if self.started_at.nil?
   end
 
 end

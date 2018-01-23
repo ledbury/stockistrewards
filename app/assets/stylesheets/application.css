@@ -11,6 +11,7 @@
  * It is generally better to create a new file per style scope.
  *
  *= require bootstrap
+ *= require bootstrap-datepicker
  *= require_tree .
  *= require_self
  */
@@ -33,4 +34,17 @@
   &.product-show-video-row {
     align-items: flex-start;
   }
+}
+.datepicker {
+  position:  absolute;
+  background: #fff;
+  border: 1px solid #c4cdd5;
+  box-shadow: inset 0 1px 0 0 rgba(99,115,129,.05);
+  border-radius: 3px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: box-shadow,border-color;
+  transition-property: box-shadow,border-color;
+  transition-duration: .2s;
+  transition-timing-function: cubic-bezier(.64,0,.35,1);
 }

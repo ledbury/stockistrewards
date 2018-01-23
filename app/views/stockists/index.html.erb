@@ -31,8 +31,6 @@
 
       <ul class="Polaris-ResourceList">
         <% @stockists.each do |s| %>
-          <% total_rewards = Reward.where(stockist_id:s.id).count %>
-          <% total_amount = Reward.where(stockist_id:s.id).sum(:amount) %>
 
           <li class="Polaris-ResourceList__ItemWrapper">
             <div class="Polaris-ResourceList__Item Polaris-ResourceList__Item--link">
@@ -49,14 +47,14 @@
 
                   </div>
                   <div class="col-sm-3">
-                    <span class="last-eligible-order-count"><%=total_rewards %></span> Orders Eligible For Reward</span>
-                    <span class="last-eligible-order-count"><%= number_to_currency total_amount %></span> To Be Paid</span>
+                    <div><span class="eligible-order-count"><%= s.rewards.count %></span> Orders Eligible For Reward</div>
+                    <div><span class="eligible-amount"><%= number_to_currency s.total_reward_amount %></span> To Be Paid</div>
                   </div>
                   <div class="col-sm-3">
                     <div class="Polaris-ButtonGroup product-links">
                       <div class="Polaris-ButtonGroup__Item">
                         <%= link_to s, class: 'Polaris-Button', data: { polaris: { unstyled: true } } do %>
-                          <span class="Polaris-Button__Content product-view-link">View</span>
+                          <span class="Polaris-Button__Content product-view-link">View Orders</span>
                         <% end %>
                       </div>
                       <div class="Polaris-ButtonGroup__Item">
