@@ -39,11 +39,8 @@ class Stockist < ApplicationRecord
     self.rewards.sum(:amount)
   end
 
-  def self.import_csv
+  def self.import_csv(shop = Shop.last)
     require 'csv'
-
-    # TEMPORARY
-    shop = Shop.first
 
     CSV.foreach("stockists.csv", quote_char: '"', col_sep: ',', row_sep: :auto, headers: true) do |row|
       if !row['Name'].blank?
