@@ -49,7 +49,7 @@ class Stockist < ApplicationRecord
         st.reward_percentage = 10
 
         # TEMPORARY
-        st.started_at = Date.today - 1.year
+        st.started_at = Date.today - 1.month
 
         if st.save
 
