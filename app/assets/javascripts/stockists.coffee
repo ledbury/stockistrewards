@@ -6,8 +6,14 @@ class App.Stockists extends App.Base
 
   new: =>
     $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode').on 'input', @updateMap
+    @initMap()
 
-  @initMap: =>
+  edit: =>
+    $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode').on 'input', @updateMap
+    @initMap()
+    @updateMap()
+
+  initMap: ->
     e = document.getElementById('map')
     if(e != null)
       App.Stockists.map = new google.maps.Map e, {center: {lat: 39.50, lng: -98.35}, zoom: App.Stockists.zoomLevel}
@@ -23,6 +29,7 @@ class App.Stockists extends App.Base
       address += $('#stockist_name').val()
     if $('#stockist_address_1').val().length > 0
       address += ', '+$('#stockist_address_1').val()
+      zl++
     if $('#stockist_address_2').val().length > 0
       address += ', '+$('#stockist_address_2').val()
     if $('#stockist_city').val().length > 0
@@ -37,6 +44,7 @@ class App.Stockists extends App.Base
       address += ', '+$('#stockist_state').val()
       zl++
     App.Stockists.zoomLevel = zl
+    App.Stockists.map.zoomLevel = zl
     address += ', USA'
 
   @codeAddress: (address) =>

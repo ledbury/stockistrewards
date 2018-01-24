@@ -50,7 +50,7 @@
                   <select id="stockist_state" name="stockist[state]" class="Polaris-Select__Input">
                     <% @states.each do |s| %>
                       <% next if s[1].name.include? 'Armed Forces' %>
-                      <option value="<%=s[0]%>" <%= if @stockist.><%=s[1].name%></option>
+                      <option value="<%=s[0]%>" <%= "selected" if @stockist.state == s[0] %>><%=s[1].name%></option>
                     <% end %>
                   </select>
                   <div
@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="submit-btns">
-          <button type="submit" class="Polaris-Button Polaris-Button--primary new-submit"><span class="Polaris-Button__Content"><span>Create Stockist</span></span></button>
+          <button type="submit" class="Polaris-Button Polaris-Button--primary new-submit"><span class="Polaris-Button__Content"><span><%= (action_name == 'edit') ? 'Save' : 'Create' %> Stockist</span></span></button>
         </div>
       </div>
 
@@ -98,6 +98,5 @@
 
     </div>
   </div>
-
 
 <% end %>
