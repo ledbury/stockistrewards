@@ -1,5 +1,6 @@
 class StockistsController < ShopifyApp::AuthenticatedController
   before_action :get_shop
+  before_action :config_country, only: [:new, :edit]
 
   def index
     @stockists = Stockist.where(shop: @shop)
@@ -59,6 +60,11 @@ class StockistsController < ShopifyApp::AuthenticatedController
 
   def get_order_count
     ShopifyAPI::Order.count
+  end
+
+  def config_country
+    @countries = ['US']
+    @states = ISO3166::Country.new(@countries[0]).states
   end
 
 end

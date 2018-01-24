@@ -1,0 +1,25 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({
+        title: "Stockists",
+        icon: "<%= asset_path('favicon.ico') %>",
+        buttons: {
+          primary: {
+            label: 'Back to Stockists',
+            message: 'save',
+            href: 'https://stockistrewards.com/stockists'
+          },
+          secondary: [{
+            label: 'Help',
+            message: 'help',
+            href: 'mailto:info@mauinewyork.com'
+          }]
+        }
+      });
+    });
+    ShopifyApp.Bar.initialize
+  </script>
+<% end %>
+
+<%= render 'stockist_form' %>
