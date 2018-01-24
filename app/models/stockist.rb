@@ -7,18 +7,23 @@ class Stockist < ApplicationRecord
   geocoded_by :full_street_address
 
   def calculate_rewards
+    count = 0
     Order.where({shop_id: self.shop_id}).each do |order|
-      if is_order_eligible? order
+      if is_reward_eligible?(order)
         puts "#{order.shopify_id} is Eligible!"
         reward = Reward.find_or_initialize_by({stockist_id: self.id, order_id: order.id})
         reward.amount = self.reward_for_order(order)
-        reward.save
+        if reward.save
+          count = count + 1
+        end
       end
     end
+    count
   end
 
-  def is_order_eligible? order
+  def is_reward_eligible?(order)
     unless self.latitude.blank? or order.latitude.blank?
+      puts "INFO: checking eligibility for order #"+order.name+", distance is #{self.distance_to(order)}"
       if self.distance_to(order) < self.order_radius
         return true
       end

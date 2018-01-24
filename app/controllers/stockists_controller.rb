@@ -3,8 +3,6 @@ class StockistsController < ShopifyApp::AuthenticatedController
 
   def index
     @stockists = Stockist.where(shop: @shop)
-
-
     OrderSyncJob.perform_later(@shop)
     if @stockists.count == 0
       redirect_to action: 'new'
@@ -24,6 +22,10 @@ class StockistsController < ShopifyApp::AuthenticatedController
     else
       logger.info @stockist.errors.inspect
     end
+  end
+
+  def show
+    @stockist = Stockist.find(params[:id])
   end
 
   def edit

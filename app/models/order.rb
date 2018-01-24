@@ -1,6 +1,7 @@
 class Order < ApplicationRecord
   belongs_to :shop
   has_many :line_items
+  geocoded_by :full_street_address
 
   def sync_order(order)
 
