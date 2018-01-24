@@ -48,3 +48,4 @@
   transition-duration: .2s;
   transition-timing-function: cubic-bezier(.64,0,.35,1);
 }
+.stockist-spacer {margin: 16px 20px;}

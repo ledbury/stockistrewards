@@ -37,14 +37,14 @@
               <div class="container-fluid">
                 <div class="row product-video-row">
                   <div class="col-sm-6">
-
-                    <p class="Polaris-ResourceList__AttributeOne"><%= s.name %></p>
-                    <div class="Polaris-ResourceList__AttributeTwo"><%= s.address_1 %></div>
-                    <div class="Polaris-ResourceList__AttributeTwo"><%= s.address_2 %></div>
-                    <div class="Polaris-ResourceList__AttributeTwo"><%= s.city %>, <%= s.state %>&nbsp;&nbsp;<%= s.postcode %></div>
-                    <div class="Polaris-ResourceList__Badge"><span class="Polaris-Badge"><%= s.reward_percentage %>% REWARD</span></div>
-                    <div class="Polaris-ResourceList__AttributeThree"><span class="Polaris-TextStyle--variationSubdued">Started <%=time_ago_in_words(s.started_at) %> ago</span></div>
-
+                    <div class="stockist-spacer">
+                      <p class="Polaris-ResourceList__AttributeOne"><%= s.name %></p>
+                      <div class="Polaris-ResourceList__AttributeTwo"><%= s.address_1 %></div>
+                      <div class="Polaris-ResourceList__AttributeTwo"><%= s.address_2 %></div>
+                      <div class="Polaris-ResourceList__AttributeTwo"><%= s.city %>, <%= s.state %>&nbsp;&nbsp;<%= s.postcode %></div>
+                      <div class="Polaris-ResourceList__Badge"><span class="Polaris-Badge"><%= s.reward_percentage %>% REWARD</span></div>
+                      <div class="Polaris-ResourceList__AttributeThree"><span class="Polaris-TextStyle--variationSubdued">Started <%=time_ago_in_words(s.started_at) %> ago</span></div>
+                    </div>
                   </div>
                   <div class="col-sm-3">
                     <div><span class="eligible-order-count"><%= s.rewards.count %></span> Orders Eligible For Reward</div>
