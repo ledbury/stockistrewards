@@ -9,7 +9,7 @@ class Order < ApplicationRecord
     self.total = order.total_line_items_price
     self.shipping_postcode = order.customer.default_address.zip
     self.customer_email = order.customer.email
-    unless order.customer.first_name.nil? || order.customer.last_name.nil?
+    if !order.customer.first_name.nil? && !order.customer.last_name.nil?
       self.customer_name = order.customer.first_name+' '+order.customer.last_name
     elsif !order.customer.default_address.nil?
       if !order.customer.default_address.name.nil?
