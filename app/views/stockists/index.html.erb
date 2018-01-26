@@ -43,7 +43,7 @@
                     </div>
                   </div>
                   <div class="col-sm-3">
-                    <div><span class="eligible-order-count"><%= s.rewards.count %></span> Orders Eligible For Reward</div>
+                    <div><span class="eligible-order-count"><%= rc = s.rewards.count %></span> Order<%="s" if rc > 0 %> Eligible For Reward</div>
                     <div><span class="eligible-amount"><%= number_to_currency s.total_reward_amount %></span> To Be Paid</div>
                     <%= link_to s, class: 'Polaris-Button view-orders', data: { polaris: { unstyled: true } } do %>
                       <span class="Polaris-Button__Content product-view-link">View Orders</span>

@@ -48,6 +48,7 @@
                 </div>
                 <div class="Polaris-Select Polaris-Select--placeholder">
                   <select id="stockist_state" name="stockist[state]" class="Polaris-Select__Input">
+                    <option value="">Select State</option>
                     <% @states.each do |s| %>
                       <% next if s[1].name.include? 'Armed Forces' %>
                       <option value="<%=s[0]%>" <%= "selected" if @stockist.state == s[0] %>><%=s[1].name%></option>

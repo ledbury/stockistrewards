@@ -1,5 +1,6 @@
 class Shop < ActiveRecord::Base
   include ShopifyApp::SessionStorage
+  has_many :product_types
   has_many :stockists
   has_many :orders
 
@@ -29,6 +30,13 @@ class Shop < ActiveRecord::Base
     self.stockists.each do |stockist|
       puts "INFO: CALCULATING REWARDS FOR STOCKIST: #{stockist.inspect}"
       stockist.calculate_rewards
+    end
+  end
+
+  def sync_product_types
+    ShopifyAPI::SmartCollection.all.each do |sc|
+      pt = ProductType.find_or_initialize_by({shop_id: self.id, title_id: sc.title})
+
     end
   end
 

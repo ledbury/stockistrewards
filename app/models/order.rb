@@ -25,16 +25,9 @@ class Order < ApplicationRecord
 
     #line items
     order.line_items.each do |li|
-      next unless li.product_exists
-      begin
-        p = ShopifyAPI::Product.find(li.product_id)
-        li_record = LineItem.find_or_initialize_by({order_id: order.id, shopify_id: li.id, product_shopify_id: li.product_id, variant_shopify_id: li.variant_id})
-        li_record.product_title = p.title
-        li_record.product_type = p.product_type
-        li_record.save
-      rescue
-        puts "INFO: shopify product not found with id: #{li.inspect}"
-      end
+      li_record = LineItem.find_or_initialize_by({order_id: order.id, shopify_id: li.id, product_shopify_id: li.product_id, variant_shopify_id: li.variant_id})
+      li_record.sync_line_item(li)
+      li_record.save
     end
   end
 

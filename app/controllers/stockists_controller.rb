@@ -46,6 +46,15 @@ class StockistsController < ShopifyApp::AuthenticatedController
     end
   end
 
+  def zip_lookup
+   sql = "select city,state from zcta where zip="+params[:zip]
+   records_array = ActiveRecord::Base.connection.execute(sql)
+   records_array.each do |r|
+     render plain: r and return
+   end
+   render plain: '[]'
+  end
+
   private
 
   def stockist_params
@@ -66,5 +75,6 @@ class StockistsController < ShopifyApp::AuthenticatedController
     @countries = ['US']
     @states = ISO3166::Country.new(@countries[0]).states
   end
+
 
 end
