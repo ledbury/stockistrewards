@@ -36,7 +36,8 @@ class Shop < ActiveRecord::Base
   def sync_product_types
     ShopifyAPI::SmartCollection.all.each do |sc|
       pt = ProductType.find_or_initialize_by({shop_id: self.id, title_id: sc.title})
-
+      pt.handle = sc.handle
+      pt.save
     end
   end
 
