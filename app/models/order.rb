@@ -23,12 +23,22 @@ class Order < ApplicationRecord
     self.latitude = order.shipping_address.latitude
     self.longitude = order.shipping_address.longitude
 
+
     #line items
+    puts "order.line_items ="+order.line_items.inspect
     order.line_items.each do |li|
-      li_record = LineItem.find_or_initialize_by({order_id: order.id, shopify_id: li.id, product_shopify_id: li.product_id, variant_shopify_id: li.variant_id})
+      li_record = LineItem.find_or_initialize_by({order_id: self.id, shopify_id: li.id, product_shopify_id: li.product_id, variant_shopify_id: li.variant_id})
+      puts li_record
+
       li_record.sync_line_item(li)
-      li_record.save
+      if li_record.save
+        puts "LINE ITEM CREATED: #{li.id}"
+      else
+        puts "ERROR: #{li_record.errors.inspect}"
+      end
     end
+
+    self.save!
   end
 
   private

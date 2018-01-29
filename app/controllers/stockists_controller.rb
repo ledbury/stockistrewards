@@ -38,6 +38,14 @@ class StockistsController < ApplicationController
     redirect_to action: "index"
   end
 
+  def export
+    @stockist = Stockist.find(params[:id])
+    csv = @stockist.export
+    send_data csv,
+                type: 'text/csv',
+                disposition: "attachment; filename=#{@stockist.name.gsub(' ','-')}.csv"
+  end
+
   def get_total_orders
     count = get_order_count
     respond_to do |format|
@@ -57,7 +65,8 @@ class StockistsController < ApplicationController
   private
 
   def stockist_params
-    params.require(:stockist).permit(:shop_id, :name, :address_1, :address_2, :city, :state, :postcode, :order_radius, :reward_percentage)
+    params.require(:stockist).permit(
+      :shop_id, :name, :address_1, :address_2, :city, :state, :postcode, :order_radius, :reward_percentage)
   end
 
   def get_shop
@@ -74,6 +83,5 @@ class StockistsController < ApplicationController
     @countries = ['US']
     @states = ISO3166::Country.new(@countries[0]).states
   end
-
 
 end

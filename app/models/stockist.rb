@@ -39,6 +39,29 @@ class Stockist < ApplicationRecord
     self.rewards.sum(:amount)
   end
 
+  def export
+    require 'csv'
+    CSV.generate do |csv|
+      column_names = ['Order', 'Order Total', 'Reward Amount', 'Order Date', 'Order Distance (mi)']
+      csv << column_names unless column_names.empty?
+
+      self.rewards.each do |r|
+        o = r.order
+        csv << [o.name, number_to_currency(o.total), number_to_currency(r.amount), o.created_at.strftime('%m/%d/%Y hh:MM'), r.order.distance_to(self).round(1)]
+      end
+      csv << export_totals(csv)
+    end
+
+  end
+
+  def export_totals(csv)
+    # spacer
+    csv << []
+    csv << ['Total:',total_reward_amount]
+    csv << ['Date Range:',total_reward_amount]
+
+  end
+
   def self.import_csv(shop = Shop.last, file = "stockists.csv")
     require 'csv'
 
@@ -49,7 +72,7 @@ class Stockist < ApplicationRecord
         st.reward_percentage = 10
 
         # TEMPORARY
-        st.started_at = Date.today - 1.month
+        st.started_at = Date.today - 2.days
 
         if st.save
 

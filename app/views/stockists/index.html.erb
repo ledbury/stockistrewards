@@ -45,8 +45,13 @@
                   <div class="col-sm-3">
                     <div><span class="eligible-order-count"><%= rc = s.rewards.count %></span> Order<%="s" if rc > 0 %> Eligible For Reward</div>
                     <div><span class="eligible-amount"><%= number_to_currency s.total_reward_amount %></span> To Be Paid</div>
-                    <%= link_to s, class: 'Polaris-Button view-orders', data: { polaris: { unstyled: true } } do %>
-                      <span class="Polaris-Button__Content product-view-link">View Orders</span>
+                    <% if s.rewards.any? %>
+                      <%= link_to s, class: 'Polaris-Button view-orders', data: { polaris: { unstyled: true } } do %>
+                        <span class="Polaris-Button__Content product-view-link">View Orders</span>
+                      <% end %>
+                      <%= link_to export_stockist_path(s), class: 'Polaris-Button view-orders', data: { polaris: { unstyled: true } } do %>
+                        <span class="Polaris-Button__Content product-view-link" href="/stockists/<%=s.id%>/orders/export">Export Orders</span>
+                      <% end %>
                     <% end %>
                   </div>
                   <div class="col-sm-3">
@@ -55,8 +60,6 @@
                         <%= link_to [:edit, s], class: 'Polaris-Button', data: { polaris: { unstyled: true } } do %>
                           <span class="Polaris-Button__Content product-view-link">Edit</span>
                         <% end %>
-
-
                       </div>
                       <div class="Polaris-ButtonGroup__Item">
                         <%= link_to s,  method: :delete, data: { confirm: 'Are you sure?' }, class: 'Polaris-Button' do %>

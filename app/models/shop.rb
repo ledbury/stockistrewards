@@ -16,8 +16,8 @@ class Shop < ActiveRecord::Base
         logger.info order.inspect
         order_record = Order.find_or_initialize_by({shop_id: self.id, shopify_id: order.id})
         next if defined?(order.customer).nil? || defined?(order.shipping_address).nil?
-        order_record.sync_order(order)
         if order_record.save
+          order_record.sync_order(order)
           order_count = order_count + 1
         else
           logger.info "ERROR: ORDER NOT SAVED: "+order.errors.inspect
@@ -34,7 +34,15 @@ class Shop < ActiveRecord::Base
     end
   end
 
-  def sync_product_types
+  def sync_product_types_from_orders
+    Model.select(:product_type).all.each do |sc|
+      pt = ProductType.find_or_initialize_by({shop_id: self.id, title: sc})
+      pt.handle = sc.gub('-', ' ').downcase
+      pt.save
+    end
+  end
+
+  def sync_product_types_by_smart_collection
     ShopifyAPI::SmartCollection.all.each do |sc|
       pt = ProductType.find_or_initialize_by({shop_id: self.id, title: sc.title})
       pt.handle = sc.handle

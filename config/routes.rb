@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   root :to => 'stockists#index'
-  resources :stockists
+
+  resources :stockists do
+    member do
+      get 'export'
+    end
+  end
+
   resources :imports
 
   get '/zipcode/:zip' => 'stockists#zip_lookup'
@@ -10,6 +16,5 @@ Rails.application.routes.draw do
 
   get '/' => 'stockists#index', as: 'app'
   mount ShopifyApp::Engine, at: '/'
-
 
 end

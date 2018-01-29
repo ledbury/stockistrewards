@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180128211038) do
+ActiveRecord::Schema.define(version: 20180129172403) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "namespace"
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(version: 20180128211038) do
     t.bigint "product_shopify_id"
     t.string "product_type"
     t.string "product_title"
+    t.integer "quantity"
+    t.decimal "amount", precision: 10
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
