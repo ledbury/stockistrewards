@@ -1,9 +1,9 @@
 class StockistsController < ApplicationController
   before_action :config_country, only: [:new, :edit]
+  before_action :shop_sync
 
   def index
     @stockists = Stockist.where(shop: @shop)
-    OrderSyncJob.perform_later(@shop)
     if @stockists.count == 0
       redirect_to action: 'new'
     end
@@ -82,6 +82,10 @@ class StockistsController < ApplicationController
   def config_country
     @countries = ['US']
     @states = ISO3166::Country.new(@countries[0]).states
+  end
+
+  def shop_sync
+    OrderSyncJob.perform_later(@shop)
   end
 
 end

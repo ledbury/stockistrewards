@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180129172403) do
+ActiveRecord::Schema.define(version: 20180129192745) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "namespace"
@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(version: 20180129172403) do
     t.string "full_street_address"
     t.integer "last_eligible_order_count"
     t.datetime "started_at"
+    t.boolean "restricted"
   end
 
   create_table "zcta", primary_key: "zip", id: :string, limit: 5, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|

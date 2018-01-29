@@ -35,10 +35,12 @@ class Shop < ActiveRecord::Base
   end
 
   def sync_product_types_from_orders
-    Model.select(:product_type).all.each do |sc|
-      pt = ProductType.find_or_initialize_by({shop_id: self.id, title: sc})
-      pt.handle = sc.gub('-', ' ').downcase
-      pt.save
+    LineItem.select(:product_type).map{|e| e.product_type}.uniq do |sc|
+      unless sc.blank?
+        pt = ProductType.find_or_initialize_by({shop_id: self.id, title: sc})
+        pt.handle = sc.gsub('-', ' ').downcase
+        pt.save
+      end
     end
   end
 

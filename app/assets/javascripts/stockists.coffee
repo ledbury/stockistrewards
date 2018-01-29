@@ -1,18 +1,14 @@
 class App.Stockists extends App.Base
   map: null,
   marker: null,
+  circle: null,
   @zoomLevel: 4,
 
   index: =>
 
   new: =>
-    $('.Polaris-Checkbox').on 'click', ->
-      $(this).find('.Polaris-Checkbox__Icon').toggleClass('checked')
-
-      if $(this).attr('id') == 'checkbox-restrict'
-        $('#product-types').toggleClass('shown')
-
     @initMap()
+    @initProductTypes()
 
     $('#import-csv').on 'click', (e) ->
       e.preventDefault()
@@ -38,10 +34,11 @@ class App.Stockists extends App.Base
 
   edit: =>
     @initMap()
+    @initProductTypes()
     @updateMap()
 
   initMap: ->
-    addressFields = $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode')
+    addressFields = $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode, #stockist_order_radius')
     addressFields.on 'change', @updateMap
     addressFields.on 'input', @updateMap
     e = document.getElementById('map')
@@ -59,6 +56,13 @@ class App.Stockists extends App.Base
 
     a = App.Stockists.getAddress()
     App.Stockists.codeAddress(a)
+
+  initProductTypes: ->
+    $('.Polaris-Checkbox').on 'click', ->
+      $(this).find('.Polaris-Checkbox__Icon').toggleClass('checked')
+
+      if $(this).attr('id') == 'checkbox-restrict'
+        $('#product-types').toggleClass('shown')
 
   @getAddress: ->
     zl = 4
@@ -95,10 +99,37 @@ class App.Stockists extends App.Base
 
         if App.Stockists.marker != undefined
           App.Stockists.marker.setMap(null)
+
         App.Stockists.marker = new google.maps.Marker
           position: results[0].geometry.location,
           map: App.Stockists.map,
           title: $('#stockist_name').val()
 
+        r = $('#stockist_order_radius').val()
+        if(parseInt(r) != "NaN")
 
+          if App.Stockists.circle != undefined
+            App.Stockists.circle.setMap(null)
+
+          if r > 90
+            App.Stockists.zoomLevel = 7
+          else if r > 45
+            App.Stockists.zoomLevel = 8
+          else if r > 25
+            App.Stockists.zoomLevel = 9
+          else
+            App.Stockists.zoomLevel = 10
+
+          App.Stockists.map.setZoom(App.Stockists.zoomLevel)
+
+          App.Stockists.circle = new google.maps.Circle({
+            strokeColor: '#0000CC',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#0000FF',
+            fillOpacity: 0.35,
+            map: App.Stockists.map,
+            center: App.Stockists.marker.position,
+            radius: parseInt(r)*1000 * 1.60934 # (miles to km)
+          });
     )

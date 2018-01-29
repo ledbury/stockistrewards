@@ -32,7 +32,17 @@ class Stockist < ApplicationRecord
   end
 
   def reward_for_order(order)
-    (order.total.to_f * self.reward_percentage.to_f) / 100.0
+    if self.restricted
+      order.line_items.each do |li|
+        next if li.product_type.blank?
+        if self.product_types.map{|e| e.title}.include? product_type
+          reward += (li.amount.to_f * self.reward_percentage.to_f) / 100.0
+        end
+      end
+      reward
+    else
+      (order.total.to_f * self.reward_percentage.to_f) / 100.0
+    end
   end
 
   def total_reward_amount
@@ -44,23 +54,28 @@ class Stockist < ApplicationRecord
     CSV.generate do |csv|
       column_names = ['Order', 'Order Total', 'Reward Amount', 'Order Date', 'Order Distance (mi)']
       csv << column_names unless column_names.empty?
-
+      earliest_date = latest_date = Date.today
       self.rewards.each do |r|
         o = r.order
-        csv << [o.name, number_to_currency(o.total), number_to_currency(r.amount), o.created_at.strftime('%m/%d/%Y hh:MM'), r.order.distance_to(self).round(1)]
+        earliest_date = [earliest_date, o.created_at].min
+        latest_date = [earliest_date, o.created_at].min
+        csv << [
+          o.name,
+          ActionController::Base.helpers.number_to_currency(o.total),
+          ActionController::Base.helpers.number_to_currency(r.amount),
+          o.created_at.strftime('%m/%d/%Y %H:%M'),
+          r.order.distance_to(self).round(1)
+        ]
       end
-      csv << export_totals(csv)
+      2.times do
+        csv << ['']
+      end
+      csv << ['Total:',ActionController::Base.helpers.number_to_currency(total_reward_amount)]
+      csv << ['Date Range:', 'From:', earliest_date.strftime('%m/%d/%Y %H:%M'), 'To:', latest_date.strftime('%m/%d/%Y %H:%M')]
     end
 
   end
 
-  def export_totals(csv)
-    # spacer
-    csv << []
-    csv << ['Total:',total_reward_amount]
-    csv << ['Date Range:',total_reward_amount]
-
-  end
 
   def self.import_csv(shop = Shop.last, file = "stockists.csv")
     require 'csv'
