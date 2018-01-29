@@ -10,7 +10,7 @@
     <% if flash[:error] %>
       ShopifyApp.flashError("<%= j flash[:error].html_safe %>");
     <% end %>
-                             
+
     document.removeEventListener(eventName, flash)
   });
 </script>

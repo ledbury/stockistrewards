@@ -58,6 +58,6 @@
   transform: translate(-50%,-50%) scale(1);
 }
 #product-types {
-  display: none;
+  display: none; margin-left: 5%;
   &.shown {display: block;}
 }

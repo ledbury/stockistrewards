@@ -1,3 +1,4 @@
+<%= render 'layouts/flash_messages' if !flash.empty? %>
 <%= form_for @stockist do |f| %>
   <%= f.hidden_field :shop_id, value: @shop.id %>
   <div class="container-fluid">
@@ -91,7 +92,7 @@
         </div>
         <div class="submit-btns">
           <button id="import-csv" class="Polaris-Button Polaris-Button--secondary new-submit"><span class="Polaris-Button__Content"><span> Import CSV </span></span></button>
-          <button type="submit" class="Polaris-Button Polaris-Button--primary new-submit"><span class="Polaris-Button__Content"><span><%= (action_name == 'edit') ? 'Save' : 'Create' %> Stockist</span></span></button>
+          <button type="submit" class="Polaris-Button Polaris-Button--primary new-submit"><span class="Polaris-Button__Content"><span><%= (['edit', 'update'].include? action_name) ? 'Save' : 'Create' %> Stockist</span></span></button>
         </div>
       </div>
 

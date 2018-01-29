@@ -1,5 +1,5 @@
 class StockistsController < ApplicationController
-  before_action :config_country, only: [:new, :edit]
+  before_action :config_country, only: [:new, :edit, :update]
   before_action :shop_sync
 
   def index
@@ -34,10 +34,30 @@ class StockistsController < ApplicationController
 
   def update
     @stockist = Stockist.find(params[:id])
-    if @stockist.update(stockist_params)
-      redirect_to action: 'index'
+    opt = @stockist.product_types
+    if product_type_params
+      @stockist.product_types.destroy_all
+      product_type_params.keys.each do |pt|
+        if product_type_params[pt] == "true"
+          @stockist.product_types << ProductType.find_by(handle: pt)
+        end
+      end
+    end
+
+    if opt == @stockist.product_types
+      logger.info "INFO:  PRODUCT TYPES NOT CHANGED"
     else
-      render
+      logger.info "INFO:  PRODUCT TYPES CHANGED"
+      @stockist.clear_rewards
+      logger.info "REMOVED "
+
+    end
+
+    if @stockist.update(stockist_params)
+      flash[:notice] = 'Stockist Updated!'
+      render action: 'edit'
+    else
+      render action: 'edit'
     end
   end
 
@@ -74,7 +94,12 @@ class StockistsController < ApplicationController
 
   def stockist_params
     params.require(:stockist).permit(
-      :shop_id, :name, :address_1, :address_2, :city, :state, :postcode, :order_radius, :reward_percentage)
+      :shop_id, :name, :address_1, :address_2, :city, :state, :postcode,
+      :order_radius, :reward_percentage, :started_at, :restricted)
+  end
+
+  def product_type_params
+    params.require(:product_type).permit(:shirt, :pants, :accessories)
   end
 
   def get_shop

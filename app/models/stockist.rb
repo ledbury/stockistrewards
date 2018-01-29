@@ -5,6 +5,7 @@ class Stockist < ApplicationRecord
   has_and_belongs_to_many :product_types
   before_save :set_country, :set_full_address, :geocode, :set_start_date
   geocoded_by :full_street_address
+  accepts_nested_attributes_for :product_types
 
   def calculate_rewards
     count = 0
@@ -33,8 +34,10 @@ class Stockist < ApplicationRecord
 
   def reward_for_order(order)
     if self.restricted
+      reward = 0
       order.line_items.each do |li|
-        next if li.product_type.blank?
+        next if li.product_type.blank? || self.product_types.blank?
+
         if self.product_types.map{|e| e.title}.include? product_type
           reward += (li.amount.to_f * self.reward_percentage.to_f) / 100.0
         end
@@ -76,6 +79,9 @@ class Stockist < ApplicationRecord
 
   end
 
+  def clear_rewards
+    self.reward.destroy_all
+  end
 
   def self.import_csv(shop = Shop.last, file = "stockists.csv")
     require 'csv'

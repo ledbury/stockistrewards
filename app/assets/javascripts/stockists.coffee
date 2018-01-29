@@ -45,7 +45,6 @@ class App.Stockists extends App.Base
 
   updateMap: ->
     zipcode = $("#stockist_postcode").val().substring(0, 5);
-    console.log('updateMap'+zipcode)
     if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode))
       url = "/zipcode/" + zipcode
       $.ajax({"url": url, "dataType": "json"}).done (data) ->
@@ -56,11 +55,26 @@ class App.Stockists extends App.Base
     App.Stockists.codeAddress(a)
 
   initProductTypes: ->
+    App.Stockists.setCheckboxes()
     $('.Polaris-Checkbox').on 'click', ->
       $(this).find('.Polaris-Checkbox__Icon').toggleClass('checked')
+      App.Stockists.setCheckboxes()
 
-      if $(this).attr('id') == 'checkbox-restrict'
-        $('#product-types').toggleClass('shown')
+  @setCheckboxes: ->
+    if $('#checkbox-restrict-icon').hasClass('checked')
+      $('#stockist_restricted').val('true')
+      $('#product-types').addClass('shown')
+    else
+      $('#stockist_restricted').val('false')
+      $('#product-types').removeClass('shown')
+
+    $('.product-type-checkbox').each ->
+      handle = $(this).attr('id').replace('checkbox-','')
+      if $("#checkbox-"+handle+"-icon").hasClass('checked')
+        $('#stockist_'+handle).val('true')
+      else
+        $('#stockist_'+handle).val('false')
+
 
   @getAddress: ->
     zl = 4
@@ -86,9 +100,8 @@ class App.Stockists extends App.Base
     address += ', USA'
 
   @codeAddress: (address) =>
-    console.log('codeAddress: '+address)
     geocoder = new google.maps.Geocoder()
-    geocoder.geocode( {address:address}, @drawCodedAddress )
+    geocoder.geocode({address:address}, @drawCodedAddress)
 
   @drawCodedAddress: (results, status) ->
     if (status == google.maps.GeocoderStatus.OK)

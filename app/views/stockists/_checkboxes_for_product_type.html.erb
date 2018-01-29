@@ -8,7 +8,7 @@
             <%= form.hidden_field :restricted, value: @stockist.restricted %>
             <input type="checkbox" class="Polaris-Checkbox__Input" aria-invalid="false" role="checkbox" aria-checked="false" value="on">
             <div class="Polaris-Checkbox__Backdrop"></div>
-            <div class="Polaris-Checkbox__Icon">
+            <div class="Polaris-Checkbox__Icon  <%= ' checked ' if @stockist.restricted %>"  id="checkbox-restrict-icon">
               <span class="Polaris-Icon">
                 <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
                   <g fill-rule="evenodd">
@@ -29,9 +29,12 @@
           <label class="Polaris-Choice" for="Checkbox-<%=t.handle%>">
             <span class="Polaris-Choice__Control">
               <div class="Polaris-Checkbox">
-                <input type="checkbox" id="checkbox-<%=t.handle%>" class="Polaris-Checkbox__Input" aria-invalid="false" role="checkbox" aria-checked="false" value="on">
+
+                <input type="hidden" name="product_type[<%=t.handle%>]" value="false" id="stockist_<%=t.handle%>"/>
+
+                <input type="checkbox" id="checkbox-<%=t.handle%>" class="Polaris-Checkbox__Input product-type-checkbox" aria-invalid="false" role="checkbox" aria-checked="false" value="on">
                 <div class="Polaris-Checkbox__Backdrop"></div>
-                <div class="Polaris-Checkbox__Icon">
+                <div class="Polaris-Checkbox__Icon   <%= ' checked ' if @stockist.product_types.map{|e| e.handle}.include? t.handle %>"  id="checkbox-<%=t.handle%>-icon">
                   <span class="Polaris-Icon">
                     <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
                       <g fill-rule="evenodd">
