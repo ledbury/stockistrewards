@@ -39,10 +39,10 @@ class Stockist < ApplicationRecord
     self.rewards.sum(:amount)
   end
 
-  def self.import_csv(shop = Shop.last)
+  def self.import_csv(shop = Shop.last, file = "stockists.csv")
     require 'csv'
 
-      CSV.foreach("stockists.csv", quote_char: '"', col_sep: ',', row_sep: :auto, headers: true) do |row|
+      CSV.foreach(file, quote_char: '"', col_sep: ',', row_sep: :auto, headers: true) do |row|
       if !row['Name'].blank?
         st = Stockist.create({shop_id: shop.id, name: row['Name'], address_1: row['Address'], city: row['City'], state: row['State'], postcode: row['ZIP']})
         st.order_radius = 10

@@ -1,5 +1,4 @@
-class StockistsController < ShopifyApp::AuthenticatedController
-  before_action :get_shop
+class StockistsController < ApplicationController
   before_action :config_country, only: [:new, :edit]
 
   def index

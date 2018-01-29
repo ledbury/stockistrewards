@@ -3,6 +3,7 @@ class Shop < ActiveRecord::Base
   has_many :product_types
   has_many :stockists
   has_many :orders
+  has_many :imports
 
   def sync_orders
     order_count = 0
@@ -35,7 +36,7 @@ class Shop < ActiveRecord::Base
 
   def sync_product_types
     ShopifyAPI::SmartCollection.all.each do |sc|
-      pt = ProductType.find_or_initialize_by({shop_id: self.id, title_id: sc.title})
+      pt = ProductType.find_or_initialize_by({shop_id: self.id, title: sc.title})
       pt.handle = sc.handle
       pt.save
     end

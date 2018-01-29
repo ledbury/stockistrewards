@@ -1,0 +1,9 @@
+<%= form_for @import, html: { multipart: true, class: "dropzone"}  do |f|  %>
+  <%= f.hidden_field :shop_id, value: @shop.id %>
+
+  <div class="fallback">
+    <%= f.file_field :file %><br>
+    <%= f.submit "Upload" %>
+  </div>
+
+<% end %>

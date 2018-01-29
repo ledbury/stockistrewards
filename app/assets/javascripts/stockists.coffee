@@ -6,20 +6,44 @@ class App.Stockists extends App.Base
   index: =>
 
   new: =>
-    addressFields = $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode')
-    addressFields.on 'change', @updateMap
-    addressFields.on 'input', @updateMap
+    $('.Polaris-Checkbox').on 'click', ->
+      $(this).find('.Polaris-Checkbox__Icon').toggleClass('checked')
+
+      if $(this).attr('id') == 'checkbox-restrict'
+        $('#product-types').toggleClass('shown')
 
     @initMap()
 
-  edit: =>
-    App.Stockist.on 'change', @updateMap
-    App.Stockist.on 'input', @updateMap
+    $('#import-csv').on 'click', (e) ->
+      e.preventDefault()
+      full = location.protocol + '//' + location.hostname + (if location.port then ':' + location.port else '')
 
+      ShopifyApp.Modal.open({
+        src: full+'/import/new',
+        title: 'Stockist CSV Import',
+        width: 'small',
+        height: 300,
+        buttons: {
+          primary: { label: "OK" }
+          secondary: [
+            {
+              label: "Cancel", callback: (label) ->
+                ShopifyApp.Modal.close();
+            }
+          ]
+        }
+      }, (result, data) ->
+        alert("result: " + result + "   data: " + data);
+      )
+
+  edit: =>
     @initMap()
     @updateMap()
 
   initMap: ->
+    addressFields = $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode')
+    addressFields.on 'change', @updateMap
+    addressFields.on 'input', @updateMap
     e = document.getElementById('map')
     if(e != null)
       App.Stockists.map = new google.maps.Map e, {center: {lat: 39.50, lng: -98.35}, zoom: App.Stockists.zoomLevel}

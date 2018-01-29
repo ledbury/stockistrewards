@@ -1,4 +1,5 @@
 class ApplicationController < ShopifyApp::AuthenticatedController
+  before_action :get_shop
   protect_from_forgery with: :exception
 
   private

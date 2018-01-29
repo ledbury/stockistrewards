@@ -12,6 +12,7 @@
  *
  *= require bootstrap
  *= require bootstrap-datepicker
+ *= require dropzone
  *= require_tree .
  *= require_self
  */
@@ -51,3 +52,12 @@
 .stockist-spacer {margin: 16px 20px;}
 .view-orders {margin: 10px 0 0 0;}
 .Polaris-Select--placeholder .Polaris-Select__Input {color:#000;}
+#new_import {display: none;}
+.Polaris-Checkbox__Icon.checked {
+  -webkit-transform: translate(-50%,-50%) scale(1);
+  transform: translate(-50%,-50%) scale(1);
+}
+#product-types {
+  display: none;
+  &.shown {display: block;}
+}

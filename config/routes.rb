@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root :to => 'stockists#index'
   resources :stockists
+  resources :imports
+
   get '/zipcode/:zip' => 'stockists#zip_lookup'
 
   get '/sync_orders', to: 'stockists#sync_orders'

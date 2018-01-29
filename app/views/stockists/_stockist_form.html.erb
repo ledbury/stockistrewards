@@ -76,19 +76,21 @@
                   <div class="Polaris-Label"><label id="TextField8Label" for="TextField8" class="Polaris-Label__Text">Start Date for Rewards:</label></div>
                 </div>
                 <div class="Polaris-TextField">
-
                   <%= f.text_field :started_at, value: (@stockist.started_at.nil?) ? Date.today.strftime('%m/%d/%Y') : @stockist.started_at.strftime('%m/%d/%Y'), class: 'Polaris-TextField__Input', data: { provide: 'datepicker' } %>
-
                   <div class="Polaris-TextField__Backdrop"></div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-6" style="height: 80px;">
 
+          </div>
+          <div class="col-sm-6">
+            <%= render 'checkboxes_for_product_type', {form: f, types: ProductType.all, label: 'Restrict by Product Type?'} %>
           </div>
         </div>
         <div class="submit-btns">
+          <button id="import-csv" class="Polaris-Button Polaris-Button--secondary new-submit"><span class="Polaris-Button__Content"><span> Import CSV </span></span></button>
           <button type="submit" class="Polaris-Button Polaris-Button--primary new-submit"><span class="Polaris-Button__Content"><span><%= (action_name == 'edit') ? 'Save' : 'Create' %> Stockist</span></span></button>
         </div>
       </div>
