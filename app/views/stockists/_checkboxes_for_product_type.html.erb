@@ -5,6 +5,7 @@
       <label class="Polaris-Choice" for="Checkbox-restrict">
         <span class="Polaris-Choice__Control">
           <div class="Polaris-Checkbox" id="checkbox-restrict">
+            <%= form.hidden_field :restricted, value: @stockist.restricted %>
             <input type="checkbox" class="Polaris-Checkbox__Input" aria-invalid="false" role="checkbox" aria-checked="false" value="on">
             <div class="Polaris-Checkbox__Backdrop"></div>
             <div class="Polaris-Checkbox__Icon">
@@ -24,25 +25,27 @@
     </div>
     <div id="product-types">
       <% types.each do |t| %>
-        <label class="Polaris-Choice" for="Checkbox-<%=t.handle%>">
-          <span class="Polaris-Choice__Control">
-            <div class="Polaris-Checkbox">
-              <input type="checkbox" id="checkbox-<%=t.handle%>" class="Polaris-Checkbox__Input" aria-invalid="false" role="checkbox" aria-checked="false" value="on">
-              <div class="Polaris-Checkbox__Backdrop"></div>
-              <div class="Polaris-Checkbox__Icon">
-                <span class="Polaris-Icon">
-                  <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
-                    <g fill-rule="evenodd">
-                      <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
-                      <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
-                    </g>
-                  </svg>
-                </span>
+        <div>
+          <label class="Polaris-Choice" for="Checkbox-<%=t.handle%>">
+            <span class="Polaris-Choice__Control">
+              <div class="Polaris-Checkbox">
+                <input type="checkbox" id="checkbox-<%=t.handle%>" class="Polaris-Checkbox__Input" aria-invalid="false" role="checkbox" aria-checked="false" value="on">
+                <div class="Polaris-Checkbox__Backdrop"></div>
+                <div class="Polaris-Checkbox__Icon">
+                  <span class="Polaris-Icon">
+                    <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
+                      <g fill-rule="evenodd">
+                        <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
+                        <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
+                      </g>
+                    </svg>
+                  </span>
+                </div>
               </div>
-            </div>
-          </span>
-          <span class="Polaris-Choice__Label"><%= t.title %></span>
-        </label>
+            </span>
+            <span class="Polaris-Choice__Label"><%= t.title %></span>
+          </label>
+        </div>
       <% end %>
     </div>
 
