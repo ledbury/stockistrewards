@@ -32,6 +32,15 @@ class StockistsController < ApplicationController
     @stockist = Stockist.find(params[:id])
   end
 
+  def update
+    @stockist = Stockist.find(params[:id])
+    if @stockist.update(stockist_params)
+      redirect_to action: 'index'
+    else
+      render
+    end
+  end
+
   def destroy
     @stockist = Stockist.find(params[:id])
     @stockist.destroy
@@ -41,9 +50,8 @@ class StockistsController < ApplicationController
   def export
     @stockist = Stockist.find(params[:id])
     csv = @stockist.export
-    send_data csv,
-                type: 'text/csv',
-                disposition: "attachment; filename=#{@stockist.name.gsub(' ','-')}.csv"
+    send_data csv, type: 'text/csv',
+      disposition: "attachment; filename=#{@stockist.name.gsub(' ','-')}.csv"
   end
 
   def get_total_orders

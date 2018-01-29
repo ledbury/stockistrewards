@@ -21,12 +21,10 @@ class App.Stockists extends App.Base
         height: 300,
         buttons: {
           primary: { label: "OK" }
-          secondary: [
-            {
-              label: "Cancel", callback: (label) ->
-                ShopifyApp.Modal.close();
-            }
-          ]
+          secondary: [{
+            label: "Cancel", callback: (label) ->
+              ShopifyApp.Modal.close()
+          }]
         }
       }, (result, data) ->
         alert("result: " + result + "   data: " + data);
@@ -42,7 +40,7 @@ class App.Stockists extends App.Base
     addressFields.on 'change', @updateMap
     addressFields.on 'input', @updateMap
     e = document.getElementById('map')
-    if(e != null)
+    if e != null
       App.Stockists.map = new google.maps.Map e, {center: {lat: 39.50, lng: -98.35}, zoom: App.Stockists.zoomLevel}
 
   updateMap: ->
@@ -87,49 +85,48 @@ class App.Stockists extends App.Base
     App.Stockists.map.zoomLevel = zl
     address += ', USA'
 
-
   @codeAddress: (address) =>
     console.log('codeAddress: '+address)
-
     geocoder = new google.maps.Geocoder()
-    geocoder.geocode( {address:address}, (results, status) ->
-      if (status == google.maps.GeocoderStatus.OK)
-        App.Stockists.map.setCenter(results[0].geometry.location)
+    geocoder.geocode( {address:address}, @drawCodedAddress )
+
+  @drawCodedAddress: (results, status) ->
+    if (status == google.maps.GeocoderStatus.OK)
+      App.Stockists.map.setCenter(results[0].geometry.location)
+      App.Stockists.map.setZoom(App.Stockists.zoomLevel)
+
+      if App.Stockists.marker != undefined
+        App.Stockists.marker.setMap(null)
+
+      App.Stockists.marker = new google.maps.Marker
+        position: results[0].geometry.location,
+        map: App.Stockists.map,
+        title: $('#stockist_name').val()
+
+      r = $('#stockist_order_radius').val()
+      if(parseInt(r) != "NaN")
+
+        if App.Stockists.circle != undefined
+          App.Stockists.circle.setMap(null)
+
+        if r > 90
+          App.Stockists.zoomLevel = 7
+        else if r > 45
+          App.Stockists.zoomLevel = 8
+        else if r > 25
+          App.Stockists.zoomLevel = 9
+        else
+          App.Stockists.zoomLevel = 10
+
         App.Stockists.map.setZoom(App.Stockists.zoomLevel)
 
-        if App.Stockists.marker != undefined
-          App.Stockists.marker.setMap(null)
-
-        App.Stockists.marker = new google.maps.Marker
-          position: results[0].geometry.location,
+        App.Stockists.circle = new google.maps.Circle({
+          strokeColor: '#0000CC',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#0000FF',
+          fillOpacity: 0.35,
           map: App.Stockists.map,
-          title: $('#stockist_name').val()
-
-        r = $('#stockist_order_radius').val()
-        if(parseInt(r) != "NaN")
-
-          if App.Stockists.circle != undefined
-            App.Stockists.circle.setMap(null)
-
-          if r > 90
-            App.Stockists.zoomLevel = 7
-          else if r > 45
-            App.Stockists.zoomLevel = 8
-          else if r > 25
-            App.Stockists.zoomLevel = 9
-          else
-            App.Stockists.zoomLevel = 10
-
-          App.Stockists.map.setZoom(App.Stockists.zoomLevel)
-
-          App.Stockists.circle = new google.maps.Circle({
-            strokeColor: '#0000CC',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#0000FF',
-            fillOpacity: 0.35,
-            map: App.Stockists.map,
-            center: App.Stockists.marker.position,
-            radius: parseInt(r)*1000 * 1.60934 # (miles to km)
-          });
-    )
+          center: App.Stockists.marker.position,
+          radius: parseInt(r)*1000 * 1.60934 # (miles to km)
+        });
