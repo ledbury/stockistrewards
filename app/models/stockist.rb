@@ -19,8 +19,9 @@ class Stockist < ApplicationRecord
         end
       end
     end
-    count
     self.calculated_at = Time.now
+    self.save
+    count
   end
 
   def is_reward_eligible?(order)
