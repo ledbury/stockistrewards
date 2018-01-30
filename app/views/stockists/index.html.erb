@@ -27,7 +27,7 @@
       <div class="Polaris-Card">
 
         <ul class="Polaris-ResourceList">
-          <% @stockists.each do |s| %>
+          <% @stockists.each_with_index do |s,ii| %>
 
             <li class="Polaris-ResourceList__ItemWrapper">
               <div class="Polaris-ResourceList__Item Polaris-ResourceList__Item--link">
@@ -43,6 +43,7 @@
                           <span class="Polaris-Badge"><%= s.reward_percentage %>% REWARD</span>
                           <span><%= s.product_type_list("for") %></span>
                         </div>
+                        <div class="Polaris-ResourceList__Badge">Within <span class="Polaris-Badge"><%= s.order_radius%> Miles</span></div>
                         <div class="Polaris-ResourceList__AttributeThree"><span class="Polaris-TextStyle--variationSubdued">Started <%=time_ago_in_words(s.started_at) %> ago</span></div>
                       </div>
                     </div>
@@ -57,7 +58,9 @@
                           <span class="Polaris-Button__Content product-view-link" href="/stockists/<%=s.id%>/orders/export">Export Orders</span>
                         <% end %>
                       <% elsif s.shop.synced_at.blank? %>
-                        <div><span class="eligible-order-count">Syncing Orders...</div>
+                        <% if ii == 0 %>
+                          <div><span class="eligible-order-count">Syncing Orders...</div>
+                        <% end %>
                       <% elsif s.calculated_at.blank? %>
                         <div><span class="eligible-order-count">Calculating Rewards...</div>
                       <% else %>
