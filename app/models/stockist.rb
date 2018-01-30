@@ -101,11 +101,14 @@ class Stockist < ApplicationRecord
         st.reward_percentage = 10
         st.product_types.destroy_all
         if !row['Product Types'].blank?
+          puts "PRODUCT TYPES:"+row['Product Types'].inspect
           pts = row['Product Types'].split(',')
+          puts pts.inspect
           pts.each do |pt|
-            pt.strip!
+            pt = pt.strip
+            pt = pt.singularize
             p = ProductType.find_or_initialize_by({title: pt, shop_id: shop.id, handle: pt.gsub(' ','-')})
-            p.save if pt.id.nil?
+            p.save if p.id.nil?
             st.product_types << p
           end
           st.restricted = true

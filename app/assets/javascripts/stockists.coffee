@@ -35,10 +35,18 @@ class App.Stockists extends App.Base
     @initProductTypes()
     @updateMap()
 
+  show: =>
+    @initMapWithOrders()
+
   initMap: ->
     addressFields = $('#stockist_name, #stockist_address_1, #stockist_address_2, #stockist_state, #stockist_postcode, #stockist_order_radius')
     addressFields.on 'change', @updateMap
     addressFields.on 'input', @updateMap
+    e = document.getElementById('map')
+    if e != null
+      App.Stockists.map = new google.maps.Map e, {center: {lat: 39.50, lng: -98.35}, zoom: App.Stockists.zoomLevel}
+
+  initMapWithOrders: ->
     e = document.getElementById('map')
     if e != null
       App.Stockists.map = new google.maps.Map e, {center: {lat: 39.50, lng: -98.35}, zoom: App.Stockists.zoomLevel}
