@@ -25,7 +25,7 @@ class Stockist < ApplicationRecord
   def is_reward_eligible?(order)
     unless self.latitude.blank? or order.latitude.blank?
       puts "INFO: checking eligibility for order #"+order.name+", distance is #{self.distance_to(order)}"
-      if self.distance_to(order) < self.order_radius && order.created_at >= stockist.started_at
+      if self.distance_to(order) < self.order_radius && order.created_at >= self.started_at
         if self.restricted
           order.line_items.each do |li|
             next if li.product_type.blank? || self.product_types.blank?
