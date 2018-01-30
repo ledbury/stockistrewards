@@ -26,6 +26,7 @@ class Shop < ActiveRecord::Base
       orders = get_orders_since_last_id
     end
     self.synced_at = Time.now
+    self.save
   end
 
   def calculate_rewards

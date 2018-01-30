@@ -26,6 +26,7 @@ class StockistsController < ApplicationController
 
   def show
     @stockist = Stockist.find(params[:id])
+    to_javascript stockist: @stockist
   end
 
   def edit

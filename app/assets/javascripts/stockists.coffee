@@ -49,7 +49,7 @@ class App.Stockists extends App.Base
   initMapWithOrders: ->
     e = document.getElementById('map')
     if e != null
-      App.Stockists.map = new google.maps.Map e, {center: {lat: 39.50, lng: -98.35}, zoom: App.Stockists.zoomLevel}
+      App.Stockists.map = new google.maps.Map e, {center: {lat: Utility.RailsVars.stockist.latitude, lng: Utility.RailsVars.stockist.longitude}, zoom: 12}
 
   updateMap: ->
     zipcode = $("#stockist_postcode").val().substring(0, 5);
