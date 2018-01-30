@@ -34,7 +34,7 @@ class StockistsController < ApplicationController
 
   def update
     @stockist = Stockist.find(params[:id])
-    opt = @stockist.product_types
+    opt = @stockist.product_types.map{|e| e.id}
     if product_type_params
       @stockist.product_types.destroy_all
       product_type_params.keys.each do |pt|
@@ -44,18 +44,18 @@ class StockistsController < ApplicationController
       end
     end
 
-    if opt == @stockist.product_types
+    if opt.sort == @stockist.product_types.map{|e| e.id}.sort
       logger.info "INFO:  PRODUCT TYPES NOT CHANGED"
     else
       logger.info "INFO:  PRODUCT TYPES CHANGED"
       @stockist.clear_rewards
-      logger.info "REMOVED "
-
+      logger.info "INFO:  REMOVED EXISTING STOCKIST REWARDS"
+      shop_sync
     end
 
     if @stockist.update(stockist_params)
       flash[:notice] = 'Stockist Updated!'
-      render action: 'edit'
+      redirect_to action: 'index' and return
     else
       render action: 'edit'
     end

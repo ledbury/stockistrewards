@@ -25,11 +25,20 @@ class Stockist < ApplicationRecord
   def is_reward_eligible?(order)
     unless self.latitude.blank? or order.latitude.blank?
       puts "INFO: checking eligibility for order #"+order.name+", distance is #{self.distance_to(order)}"
-      if self.distance_to(order) < self.order_radius
-        return true
+      if self.distance_to(order) < self.order_radius && order.created_at >= stockist.started_at
+        if self.restricted
+          order.line_items.each do |li|
+            next if li.product_type.blank? || self.product_types.blank?
+            if self.product_types.map{|e| e.title}.include? li.product_type
+              return true
+            end
+          end
+        else
+          return true
+        end
       end
+      false
     end
-    false
   end
 
   def reward_for_order(order)
@@ -37,8 +46,7 @@ class Stockist < ApplicationRecord
       reward = 0
       order.line_items.each do |li|
         next if li.product_type.blank? || self.product_types.blank?
-
-        if self.product_types.map{|e| e.title}.include? product_type
+        if self.product_types.map{|e| e.title}.include? li.product_type
           reward += (li.amount.to_f * self.reward_percentage.to_f) / 100.0
         end
       end
@@ -80,7 +88,7 @@ class Stockist < ApplicationRecord
   end
 
   def clear_rewards
-    self.reward.destroy_all
+    self.rewards.destroy_all
   end
 
   def self.import_csv(shop = Shop.last, file = "stockists.csv")
@@ -91,9 +99,22 @@ class Stockist < ApplicationRecord
         st = Stockist.create({shop_id: shop.id, name: row['Name'], address_1: row['Address'], city: row['City'], state: row['State'], postcode: row['ZIP']})
         st.order_radius = 10
         st.reward_percentage = 10
+        st.product_types.destroy_all
+        if !row['Product Types'].blank?
+          pts = row['Product Types'].split(',')
+          pts.each do |pt|
+            pt.strip!
+            p = ProductType.find_or_initialize_by({title: pt, shop_id: shop.id, handle: pt.gsub(' ','-')})
+            p.save if pt.id.nil?
+            st.product_types << p
+          end
+          st.restricted = true
+        else
+          st.restricted = false
+        end
 
         # TEMPORARY
-        st.started_at = Date.today - 2.days
+        st.started_at = Date.today - 1.week
 
         if st.save
 
@@ -101,6 +122,12 @@ class Stockist < ApplicationRecord
           logger.info "ERROR: STOCKIST failed to save: #{st.errors.inspect}"
         end
       end
+    end
+  end
+
+  def product_type_list(prefix)
+    unless self.product_types.blank?
+      prefix+" "+self.product_types.map{|e| e.title.pluralize}.to_sentence
     end
   end
 
