@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180129212438) do
+ActiveRecord::Schema.define(version: 20180130024634) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "namespace"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 20180129212438) do
     t.string "shopify_token", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "synced_at"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 
@@ -143,7 +144,6 @@ ActiveRecord::Schema.define(version: 20180129212438) do
     t.integer "last_eligible_order_count"
     t.datetime "started_at"
     t.boolean "restricted"
-    t.datetime "synced_at"
     t.datetime "calculated_at"
     t.string "units"
   end

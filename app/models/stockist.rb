@@ -3,9 +3,9 @@ class Stockist < ApplicationRecord
   has_many :orders
   has_many :rewards
   has_and_belongs_to_many :product_types
+  accepts_nested_attributes_for :product_types
   before_save :set_country, :set_full_address, :geocode, :set_start_date
   geocoded_by :full_street_address
-  accepts_nested_attributes_for :product_types
 
   def calculate_rewards
     count = 0
@@ -20,6 +20,7 @@ class Stockist < ApplicationRecord
       end
     end
     count
+    self.calculated_at = Time.now
   end
 
   def is_reward_eligible?(order)

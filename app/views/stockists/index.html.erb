@@ -56,6 +56,10 @@
                         <%= link_to export_stockist_path(s), class: 'Polaris-Button view-orders', data: { polaris: { unstyled: true } } do %>
                           <span class="Polaris-Button__Content product-view-link" href="/stockists/<%=s.id%>/orders/export">Export Orders</span>
                         <% end %>
+                      <% elsif s.shop.synced_at.blank? %>
+                        <div><span class="eligible-order-count">Syncing Orders...</div>
+                      <% elsif s.calculated_at.blank? %>
+                        <div><span class="eligible-order-count">Calculating Rewards...</div>
                       <% else %>
                         <div><span class="eligible-order-count">No Eligible Orders Yet</div>
                       <% end %>
