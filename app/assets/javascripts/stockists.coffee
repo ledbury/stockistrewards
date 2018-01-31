@@ -15,7 +15,7 @@ class App.Stockists extends App.Base
       full = location.protocol + '//' + location.hostname + (if location.port then ':' + location.port else '')
 
       ShopifyApp.Modal.open({
-        src: full+'/import/new',
+        src: full+'/imports/new',
         title: 'Stockist CSV Import',
         width: 'small',
         height: 300,
