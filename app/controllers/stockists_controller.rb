@@ -71,7 +71,7 @@ class StockistsController < ApplicationController
   def export
     @stockist = Stockist.find(params[:id])
     csv = @stockist.export
-    send_data csv, type: 'text/csv', disposition: "attachment"
+    send_data csv, type: 'text/csv', filename: @stockist.name.gsub(' ','-')+".csv", disposition: "attachment"
   end
 
   def get_total_orders
