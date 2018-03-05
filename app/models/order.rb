@@ -6,6 +6,9 @@ class Order < ApplicationRecord
   def sync_order(order)
 
     self.name = order.name
+    self.first_name = order.shipping_address.first_name
+    self.last_name = order.shipping_address.last_name
+    self.phone = order.shipping_address.phone
     self.total = order.total_line_items_price
     self.shipping_postcode = order.customer.default_address.zip
     self.customer_email = order.customer.email

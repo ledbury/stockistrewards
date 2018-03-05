@@ -65,7 +65,7 @@ class Stockist < ApplicationRecord
   def export
     require 'csv'
     CSV.generate do |csv|
-      column_names = ['Order', 'Order Total', 'Reward Amount', 'Order Date', 'Order Distance (mi)']
+      column_names = ['Order', 'Customer Name', 'Phone', 'Order Total', 'Reward Amount', 'Order Date', 'Order Distance (mi)']
       csv << column_names unless column_names.empty?
       earliest_date = latest_date = Date.today
       self.rewards.each do |r|
@@ -74,6 +74,8 @@ class Stockist < ApplicationRecord
         latest_date = [earliest_date, o.created_at].min
         csv << [
           o.name,
+          o.customer_name,
+          o.customer_phone,
           ActionController::Base.helpers.number_to_currency(o.total),
           ActionController::Base.helpers.number_to_currency(r.amount),
           o.created_at.strftime('%m/%d/%Y %H:%M'),
