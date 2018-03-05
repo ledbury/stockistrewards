@@ -1,5 +1,12 @@
+Bulk upload a CSV of Stockists.  Follow the format in this example.
+
 <%= form_for @import, html: { multipart: true, class: "dropzone"}  do |f|  %>
   <%= f.hidden_field :shop_id, value: @shop.id %>
+
+  <div class="resumable-droppable-container" id="drop-target">
+    <%= image_tag 'resumable-drop-icon.png' %>
+    <div class="resumable-label">Drop file to upload</div>
+  </div>
 
   <div class="fallback">
     <%= f.file_field :file %><br>

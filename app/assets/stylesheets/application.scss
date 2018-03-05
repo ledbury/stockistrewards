@@ -21,7 +21,7 @@
 .new-stockist {margin: 2% 0 0 0%;}
 #map {width: 600px; height: 600px; margin: 6% 0 0 2%;}
 .submit-btns {
-  position: absolute; right: 0px; left: 0px;
+  position: absolute; right: 10px; top: 515px;
   button {position: relative; float: left; margin-left: 40px;}
 }
 .product-links {
@@ -61,3 +61,4 @@
   display: none; margin-left: 5%;
   &.shown {display: block;}
 }
+.dropzone {width: 80%;}
