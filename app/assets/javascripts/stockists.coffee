@@ -5,6 +5,8 @@ class App.Stockists extends App.Base
   @zoomLevel: 4,
 
   index: =>
+    $('.calc-btn').click ->
+      $('#new_reward_period').submit()
 
   new: =>
     @initMap()

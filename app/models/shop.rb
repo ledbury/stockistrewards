@@ -62,7 +62,6 @@ class Shop < ActiveRecord::Base
       st = s.started_at.blank? ? Date.today : s.started_at
       start_date = [start_date, st].min
     end
-    start_date
   end
 
   def get_orders_since_last_id

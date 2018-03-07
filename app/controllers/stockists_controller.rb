@@ -4,6 +4,8 @@ class StockistsController < ApplicationController
 
   def index
     @stockists = Stockist.where(shop: @shop)
+    @reward_period = RewardPeriod.new
+
     if @stockists.count == 0
       redirect_to action: 'new'
     end
@@ -66,6 +68,10 @@ class StockistsController < ApplicationController
     @stockist = Stockist.find(params[:id])
     @stockist.destroy
     redirect_to action: "index"
+  end
+
+  def calculate
+
   end
 
   def export

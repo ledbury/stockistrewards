@@ -1,0 +1,2 @@
+class RewardPeriod < ApplicationRecord
+end

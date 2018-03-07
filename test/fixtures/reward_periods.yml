@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shop_id: 1
+  start_date: 2018-03-06 14:28:05
+  end_date: 2018-03-06 14:28:05
+
+two:
+  shop_id: 1
+  start_date: 2018-03-06 14:28:05
+  end_date: 2018-03-06 14:28:05

@@ -27,8 +27,39 @@
       <div class="Polaris-Card">
 
         <ul class="Polaris-ResourceList">
-          <% @stockists.each_with_index do |s,ii| %>
+          <li class="Polaris-ResourceList__ItemWrapper" style="height: 100px; margin: 20px 0 0 20px;">
 
+            <%= form_for @reward_period, url: '/calculate', id: 'calc' do |f| %>
+              <div class="col-sm-2">
+                <div class="Polaris-Labelled__LabelWrapper">
+                  <div class="Polaris-Label"><label id="TextField8Label" for="TextField8" class="Polaris-Label__Text">Start Date</label></div>
+                </div>
+                <div class="Polaris-TextField">
+                  <%= f.text_field :start_date, value: (@reward_period.start_date.nil?) ? Date.today.strftime('%m/%d/%Y') : @reward_period.end_date.strftime('%m/%d/%Y'), class: 'Polaris-TextField__Input', data: { provide: 'datepicker' } %>
+                  <div class="Polaris-TextField__Backdrop"></div>
+                </div>
+              </div>
+
+              <div class="col-sm-2">
+                <div class="Polaris-Labelled__LabelWrapper">
+                  <div class="Polaris-Label"><label id="TextField8Label" for="TextField8" class="Polaris-Label__Text">End Date</label></div>
+                </div>
+                <div class="Polaris-TextField">
+                  <%= f.text_field :end_date, value: (@reward_period.start_date.nil?) ? Date.today.strftime('%m/%d/%Y') : @reward_period.end_date.strftime('%m/%d/%Y'), class: 'Polaris-TextField__Input', data: { provide: 'datepicker' } %>
+                  <div class="Polaris-TextField__Backdrop"></div>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <div class="Polaris-ButtonGroup__Item">
+                  <button type="button" class="Polaris-Button Polaris-Button--primary calc-btn"><span class="Polaris-Button__Content"><span>Calculate</span></span></button>
+                </div>
+              </div>
+
+            <% end %>
+
+          </li>
+          <% @stockists.each_with_index do |s,ii| %>
             <li class="Polaris-ResourceList__ItemWrapper">
               <div class="Polaris-ResourceList__Item Polaris-ResourceList__Item--link">
                 <div class="container-fluid">

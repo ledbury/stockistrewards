@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post 'calculate' => 'calculations#calculate'
+
   resources :imports
 
   get '/zipcode/:zip' => 'stockists#zip_lookup'

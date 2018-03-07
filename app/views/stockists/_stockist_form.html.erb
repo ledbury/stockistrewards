@@ -74,7 +74,7 @@
             <div class="Polaris-FormLayout__Item">
               <div class="">
                 <div class="Polaris-Labelled__LabelWrapper">
-                  <div class="Polaris-Label"><label id="TextField8Label" for="TextField8" class="Polaris-Label__Text">Start Date for Rewards:</label></div>
+                  <div class="Polaris-Label"><label id="TextField8Label" for="TextField8" class="Polaris-Label__Text">Start Date for Rewards</label></div>
                 </div>
                 <div class="Polaris-TextField">
                   <%= f.text_field :started_at, value: (@stockist.started_at.nil?) ? Date.today.strftime('%m/%d/%Y') : @stockist.started_at.strftime('%m/%d/%Y'), class: 'Polaris-TextField__Input', data: { provide: 'datepicker' } %>
