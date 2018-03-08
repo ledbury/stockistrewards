@@ -8,6 +8,7 @@ class CalculationsController < ApplicationController
       redirect_to '/stockists' and return
     end
 
+    OrderSyncJob.perform_later(@shop)
 
   end
 

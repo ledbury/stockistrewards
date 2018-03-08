@@ -2,15 +2,26 @@ class Shop < ActiveRecord::Base
   include ShopifyApp::SessionStorage
   has_many :product_types
   has_many :stockists
+  has_many :reward_periods
   has_many :orders
   has_many :imports
+
+  def last_reward_period
+    reward_periods.last if reward_periods.any?
+  end
 
   def sync_orders
     order_count = 0
     orders = 0
     puts "INFO: sync_orders SHOP: #{self.inspect}"
 
-    orders = get_orders_since_last_id
+    if self.last_reward_period.nil?
+      orders = get_orders_since_last_id
+    else
+      orders = get_orders_since
+    end
+
+
     while orders.count > 0
       orders.each do |order|
         logger.info order.inspect
@@ -64,9 +75,16 @@ class Shop < ActiveRecord::Base
     end
   end
 
+  def earliest_period_date
+    last_reward_period.start_date
+  end
+
   def get_orders_since_last_id
     sid = Order.maximum(:shopify_id)
     orders = ShopifyAPI::Order.find(:all, params: {since_id: sid, order: 'created_at ASC', created_at_min: earliest_start_date })
   end
 
+  def get_reward_period_orders
+    orders = ShopifyAPI::Order.find(:all, params: {since_id: sid, order: 'created_at ASC', created_at_min: earliest_period_date })
+  end
 end
