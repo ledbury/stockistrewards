@@ -4,7 +4,8 @@ class StockistsController < ApplicationController
 
   def index
     @stockists = Stockist.where(shop: @shop)
-    @reward_period = RewardPeriod.new
+    @reward_period = @shop.last_reward_period
+    @reward_period = RewardPeriod.new if @reward_period.nil?
 
     if @stockists.count == 0
       redirect_to action: 'new'
