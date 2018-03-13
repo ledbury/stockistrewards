@@ -6,10 +6,6 @@ class Shop < ActiveRecord::Base
   has_many :orders
   has_many :imports
 
-  def last_reward_period
-    reward_periods.last if reward_periods.any?
-  end
-
   def sync_orders
     order_count = 0
     orders = 0
@@ -18,7 +14,7 @@ class Shop < ActiveRecord::Base
     if self.last_reward_period.nil?
       orders = get_orders_since_last_id
     else
-      orders = get_orders_since
+      orders = get_reward_period_orders
     end
 
 
@@ -45,6 +41,9 @@ class Shop < ActiveRecord::Base
       puts "INFO: CALCULATING REWARDS FOR STOCKIST: #{stockist.inspect}"
       stockist.calculate_rewards
     end
+    rp = shop.last_reward_period
+    rp.calculated_at = Time.now
+    rp.save
   end
 
   def sync_product_types_from_orders
@@ -65,15 +64,24 @@ class Shop < ActiveRecord::Base
     end
   end
 
-  private
-
   def earliest_start_date
     start_date = Date.today
     self.stockists.each do |s|
       st = s.started_at.blank? ? Date.today : s.started_at
       start_date = [start_date, st].min
     end
+    start_date
   end
+
+  def last_reward_period
+    reward_periods.last if reward_periods.any?
+  end
+
+  def last_calculated_reward_period
+    reward_periods.where.not(calculated_at: nil).last if reward_periods.any?
+  end
+
+  private
 
   def earliest_period_date
     last_reward_period.start_date
@@ -85,6 +93,8 @@ class Shop < ActiveRecord::Base
   end
 
   def get_reward_period_orders
-    orders = ShopifyAPI::Order.find(:all, params: {since_id: sid, order: 'created_at ASC', created_at_min: earliest_period_date })
+    orders = ShopifyAPI::Order.find(:all, params: {order: 'created_at ASC', created_at_min: self.last_reward_period.start_date })
   end
+
+
 end

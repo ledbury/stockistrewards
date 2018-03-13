@@ -4,9 +4,8 @@ class StockistsController < ApplicationController
 
   def index
     @stockists = Stockist.where(shop: @shop)
-    @reward_period = @shop.last_reward_period
-    @reward_period = RewardPeriod.new if @reward_period.nil?
-
+    @reward_period = RewardPeriod.new
+    @reward_period.shop = @shop
     if @stockists.count == 0
       redirect_to action: 'new'
     end
@@ -78,7 +77,7 @@ class StockistsController < ApplicationController
   def export
     @stockist = Stockist.find(params[:id])
     csv = @stockist.export
-    send_data csv, type: 'text/csv', filename: @stockist.name.gsub(' ','-')+".csv", disposition: "attachment"
+    send_data csv, type: 'text/csv', filename: @stockist.name.gsub(' ','-')+".csv", disposition: "attachment" and return
   end
 
   def get_total_orders

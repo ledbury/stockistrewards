@@ -12,10 +12,15 @@ class Stockist < ApplicationRecord
     Order.where({shop_id: self.shop_id}).each do |order|
       if is_reward_eligible?(order)
         puts "#{order.shopify_id} is Eligible!"
-        reward = Reward.find_or_initialize_by({stockist_id: self.id, order_id: order.id})
+        rp = shop.last_reward_period
+        reward = Reward.find_or_initialize_by({stockist_id: self.id, order_id: order.id, reward_period: rp})
         reward.amount = self.reward_for_order(order)
+
         if reward.save
           count = count + 1
+        else
+          logger.info 'REWARD SAVE FAILED!'
+          logger.info reward.errors.inspect
         end
       end
     end
@@ -62,6 +67,10 @@ class Stockist < ApplicationRecord
     self.rewards.sum(:amount)
   end
 
+  def rewards_for_last_period
+
+  end
+
   def export
     require 'csv'
     CSV.generate do |csv|
@@ -94,6 +103,10 @@ class Stockist < ApplicationRecord
 
   def clear_rewards
     self.rewards.destroy_all
+  end
+
+  def rewards_for_last_period
+    Reward.where(reward_period: shop.last_reward_period, stockist: self)
   end
 
   def self.import_csv(shop = Shop.last, file = "stockists.csv")

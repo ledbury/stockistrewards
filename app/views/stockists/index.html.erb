@@ -35,7 +35,7 @@
                   <div class="Polaris-Label"><label id="TextField8Label" for="TextField8" class="Polaris-Label__Text">Start Date</label></div>
                 </div>
                 <div class="Polaris-TextField">
-                  <%= f.text_field :start_date, value: (@reward_period.start_date.nil?) ? Date.today.strftime('%m/%d/%Y') : @reward_period.end_date.strftime('%m/%d/%Y'), class: 'Polaris-TextField__Input', data: { provide: 'datepicker' } %>
+                  <%= f.text_field :start_date, value: (@reward_period.start_date.nil?) ? @shop.earliest_start_date.strftime('%m/%d/%Y') : @reward_period.start_date.strftime('%m/%d/%Y'), class: 'Polaris-TextField__Input', data: { provide: 'datepicker' } %>
                   <div class="Polaris-TextField__Backdrop"></div>
                 </div>
               </div>
