@@ -6,9 +6,8 @@ class Order < ApplicationRecord
   def sync_order(order)
 
     self.name = order.name
-    self.first_name = order.shipping_address.first_name
-    self.last_name = order.shipping_address.last_name
-    self.phone = order.shipping_address.phone
+    self.first_name = order.customer.first_name
+    self.last_name = order.customer.last_name    
     self.total = order.total_line_items_price
     self.shipping_postcode = order.customer.default_address.zip
     self.customer_email = order.customer.email
@@ -17,6 +16,7 @@ class Order < ApplicationRecord
     elsif !order.customer.default_address.nil?
       if !order.customer.default_address.name.nil?
         self.customer_name = order.customer.default_address.name
+        self.phone = order.customer.default_address.phone
       end
     end
     self.created_at = order.processed_at.nil? ? order.created_at : order.processed_at

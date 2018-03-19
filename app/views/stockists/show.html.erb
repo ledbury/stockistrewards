@@ -46,6 +46,7 @@
                   <div class="Polaris-ResourceList__Content">
                     <div class="Polaris-ResourceList__Attributes">
                       <p class="Polaris-ResourceList__AttributeOne">Order #<%= r.order.name %> Total: <%= number_to_currency(r.order.total) %>  Reward: <%= number_to_currency(r.amount) %></p>
+                      <p class="Polaris-ResourceList__AttributeOne">Customer: <%= r.order.first_name %> </p>
                       <div class="Polaris-ResourceList__AttributeTwo" style="text-align:center">
                         <%= r.order.full_street_address %> (<%= r.order.distance_to(@stockist).round(1) %> Miles Away)
                       </div>
